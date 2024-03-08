@@ -1,44 +1,46 @@
 import React, { useState } from "react";
+import axios from "../../services/axiosService";
 import AdminSideBar from "../../components/admin/AdminSideBar";
-import {getStorage} from "firebase/storage"
+import { getStorage } from "firebase/storage";
 import { app } from "../../firebase";
 
-function AddTeachers({ onAddTeacher }) {
+function AddTeachers() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [gender, setGender] = useState("");
-  const [avatar, setAvatar] = useState("");
+  // const [avatar, setAvatar] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const newTeacher = {
-      id: Math.random(),
-      avatar,
-      name,
-      email,
-      subject,
-      gender,
-      blocked: false,
-    };
-    onAddTeacher(newTeacher);
-    setName("");
-    setEmail("");
-    setSubject("");
-    setGender("");
-    setAvatar("");
-  };
-
-  const handleAvatarChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatar(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
+    try {
+      const newTeacher = { name, email, subject, gender };
+      const response = await axios.post("/admin/add-teacher", newTeacher);
+      console.log("Teacher added successfully", response.data);
+      // Reset the form after successful submission
+      setName("");
+      setEmail("");
+      setSubject("");
+      setGender("");
+      // setAvatar("");
+      setError("");
+    } catch (error) {
+      console.error("Error adding teacher:", error);
+      setError(error.response.data.error);
     }
   };
+
+  // const handleAvatarChange = (event) => {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     setAvatar(reader.result);
+  //   };
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   return (
     <div className="flex h-screen">
@@ -90,16 +92,20 @@ function AddTeachers({ onAddTeacher }) {
               <label htmlFor="gender" className="text-white font-medium">
                 Gender:
               </label>
-              <input
-                type="text"
+              <select
                 id="gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white"
                 required
-              />
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
             </div>
-            <div className="mb-4">
+
+            {/* <div className="mb-4">
               <label htmlFor="avatar" className="text-white font-medium">
                 Profile Photo:
               </label>
@@ -116,8 +122,9 @@ function AddTeachers({ onAddTeacher }) {
               >
                 Choose File
               </label>
-            </div>
+            </div> */}
           </div>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <button
             type="submit"
             className="px-4 py-2 rounded-md bg-zinc-600 text-white hover:bg-zinc-700"

@@ -44,7 +44,7 @@ function Courses() {
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-3xl font-semibold mb-6 text-white">Courses</h2>
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-md shadow-md mb-6 md:mr-4">
+          <div className=" h-2/5 w-full md:w-1/2 bg-gray-200 p-6 rounded-md shadow-md mb-6 md:mr-4">
             <form onSubmit={handleSubmit} className="mb-6">
               <div className="mb-4">
                 <label
@@ -90,7 +90,7 @@ function Courses() {
                 <button
                   type="button"
                   onClick={handleAddSubject}
-                  className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800"
+                  className="bg-zinc-700 text-white px-4 py-2 rounded-md mb-2 hover:bg-zinc-800"
                 >
                   Add Subject
                 </button>
