@@ -14,7 +14,7 @@ function Login() {
     try {
       console.log({ email, password });
       const response = await axios.post("/admin/login", { email, password });
-
+      localStorage.setItem("token", response.data.token);
       console.log("Login successful", response.data);
       navigate("/home");
     } catch (error) {

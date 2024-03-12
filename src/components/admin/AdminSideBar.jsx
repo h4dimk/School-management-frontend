@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminSideBar() {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
   return (
     <div
       className="flex flex-col h-full bg-zinc-700 text-white p-4"
@@ -64,6 +71,14 @@ function AdminSideBar() {
             >
               Courses
             </a>
+          </li>
+          <li className="mt-10">
+            <button
+              onClick={handleLogout}
+              className="text-lg text-gray-300 hover:text-white bg-gray-600 rounded-md py-2 px-16 block text-center"
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </nav>

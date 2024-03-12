@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import { getStorage } from "firebase/storage";
 import { app } from "../../firebase";
@@ -11,7 +11,25 @@ function AddStudents() {
   const [batch, setBatch] = useState("");
   const [gender, setGender] = useState("");
   // const [avatar, setAvatar] = useState("");
+  const [coursesList, setCoursesList] = useState([]);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get("/admin/get-courses");
+      if (response.data) {
+        setCoursesList(response.data);
+      } else {
+        console.error("Response data is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -85,14 +103,20 @@ function AddStudents() {
               <label htmlFor="course" className="text-white font-medium">
                 Course:
               </label>
-              <input
-                type="text"
+              <select
                 id="course"
                 value={course}
                 onChange={(e) => setCourse(e.target.value)}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white"
                 required
-              />
+              >
+                <option value="">Select Course</option>
+                {coursesList.map((course) => (
+                  <option key={course._id} value={course.course}>
+                    {course.course}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="mb-4">
               <label htmlFor="batch" className="text-white font-medium">

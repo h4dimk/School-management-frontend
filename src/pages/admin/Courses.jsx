@@ -1,10 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
+import axios from "../../services/axiosService";
 
 function Courses() {
   const [course, setCourse] = useState("");
   const [subjects, setSubjects] = useState([{ name: "" }]);
   const [coursesList, setCoursesList] = useState([]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get("/admin/get-courses");
+      if (response.data) {
+        const coursesWithSubjects = response.data.map((course) => ({
+          ...course,
+          subjects: course.subjects || [],
+        }));
+        setCoursesList(coursesWithSubjects);
+      } else {
+        console.error("Response data is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
 
   const handleCourseChange = (event) => {
     setCourse(event.target.value);
@@ -25,17 +47,30 @@ function Courses() {
     setSubjects(newSubjects);
   };
 
-  const handleRemoveCourse = (index) => {
-    const newCoursesList = [...coursesList];
-    newCoursesList.splice(index, 1);
-    setCoursesList(newCoursesList);
+  const handleRemoveCourse = async (index) => {
+    try {
+      await axios.delete(`/admin/remove-course/${coursesList[index]._id}`);
+      const newCoursesList = [...coursesList];
+      newCoursesList.splice(index, 1);
+      setCoursesList(newCoursesList);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setCoursesList([...coursesList, { course, subjects }]);
-    setCourse("");
-    setSubjects([{ name: "" }]);
+    try {
+      const response = await axios.post("/admin/add-course", {
+        course,
+        subjects,
+      });
+      fetchCourses();
+      setCourse("");
+      setSubjects([{ name: "" }]);
+    } catch (error) {
+      console.error("Error adding course:", error);
+    }
   };
 
   return (
@@ -95,19 +130,24 @@ function Courses() {
                   Add Subject
                 </button>
               </div>
-              <button
-                type="submit"
-                className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800"
-              >
-                Add Course
-              </button>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800"
+                >
+                  Add Course
+                </button>
+              </div>
             </form>
           </div>
           <div className="w-full md:w-1/2">
-            <div className="bg-white p-6 rounded-md shadow-md">
+            <div className="bg-gray-200 p-6 rounded-md shadow-md">
               <h2 className="text-lg font-semibold mb-4">Added Courses:</h2>
               {coursesList.map((item, index) => (
-                <div key={index} className="mb-4 p-4 border rounded-md">
+                <div
+                  key={index}
+                  className="mb-4 p-4 border bg-white rounded-md"
+                >
                   <div className="flex justify-between items-center mb-2">
                     <div>
                       <strong>Course:</strong> {item.course}
@@ -121,9 +161,10 @@ function Courses() {
                   </div>
                   <strong>Subjects:</strong>
                   <ul>
-                    {item.subjects.map((subject, subIndex) => (
-                      <li key={subIndex}>{subject.name}</li>
-                    ))}
+                    {item.subjects &&
+                      item.subjects.map((subject, subIndex) => (
+                        <li key={subIndex}>{subject.name}</li>
+                      ))}
                   </ul>
                 </div>
               ))}
