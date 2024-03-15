@@ -1,12 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "../../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 function AdminSideBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleLogout() {
     localStorage.removeItem("token");
-    navigate("/login");
+    dispatch(signOut());
+    navigate("/admin/login");
   }
   return (
     <div
@@ -20,13 +24,16 @@ function AdminSideBar() {
         <p className="text-2xl text-center mb-3"> Admin </p>
         <ul>
           <li className="mb-4">
-            <a href="/home" className="text-lg text-gray-300 hover:text-white">
+            <a
+              href="/admin/home"
+              className="text-lg text-gray-300 hover:text-white"
+            >
               Home
             </a>
           </li>
           <li className="mb-4">
             <a
-              href="/profile"
+              href="/admin/profile"
               className="text-lg text-gray-300 hover:text-white"
             >
               Profile
@@ -34,7 +41,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/manage-teachers"
+              href="/admin/manage-teachers"
               className="text-lg text-gray-300 hover:text-white"
             >
               Manage Teachers
@@ -42,7 +49,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/add-teachers"
+              href="/admin/add-teachers"
               className="text-lg text-gray-300 hover:text-white"
             >
               Add Teachers
@@ -50,7 +57,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/manage-students"
+              href="/admin/manage-students"
               className="text-lg text-gray-300 hover:text-white"
             >
               Manage Students
@@ -58,7 +65,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/add-students"
+              href="/admin/add-students"
               className="text-lg text-gray-300 hover:text-white"
             >
               Add Students
@@ -66,7 +73,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/courses"
+              href="/admin/courses"
               className="text-lg text-gray-300 hover:text-white"
             >
               Courses
