@@ -1,24 +1,39 @@
 import React, { useState } from "react";
-import axios from "../services/axiosService";
+import axios from "../../services/axiosService";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../../redux/user/userSlice";
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.user);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      console.log({ email, password });
+      dispatch(signInStart());
       const response = await axios.post("/admin/login", { email, password });
-      localStorage.setItem("token", response.data.token);
-      console.log("Login successful", response.data);
-      navigate("/home");
+      const data = response.data.result.admin;
+
+      localStorage.setItem("token", data.token);
+
+      if (data.success === false) {
+        dispatch(signInFailure(data));
+      } else {
+        console.log("Login successful", data);
+        dispatch(signInSuccess(data._doc));
+        navigate("/admin/home");
+      }
     } catch (error) {
-      setError("Invalid email or password");
+      dispatch(signInFailure("Failed to login"));
       console.error("Login error:", error);
     }
   };
@@ -27,7 +42,7 @@ function Login() {
     <div className="flex justify-center items-center h-screen bg-zinc-900">
       <div className="bg-zinc-600 p-24 rounded-lg shadow-md mx-auto">
         <h2 className="text-3xl font-semibold mb-6 text-white text-center">
-          Login
+          Admin Login
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
@@ -75,4 +90,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;
