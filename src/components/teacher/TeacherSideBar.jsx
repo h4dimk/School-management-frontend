@@ -1,9 +1,13 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "../../redux/user/userSlice";
 function TeacherSideBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   function handleLogout() {
     localStorage.removeItem("token");
+    dispatch(signOut());
     navigate("/teacher/login");
   }
   return (

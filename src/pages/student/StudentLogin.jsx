@@ -1,24 +1,39 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../services/axiosService";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../../redux/user/userSlice";
 
 function StudentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.user);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      console.log({ email, password });
+      dispatch(signInStart());
       const response = await axios.post("/student/login", { email, password });
-      localStorage.setItem("token", response.data.token);
-      console.log("Login successful", response.data);
-      navigate("/student/home");
+      const data = response.data.result;
+      console.log(data);
+
+      localStorage.setItem("token", data.token);
+      if (data.success === false) {
+        dispatch(signInFailure(data));
+      } else {
+        console.log("Login successful", data);
+        dispatch(signInSuccess(data.student));
+        navigate("/student/home");
+      }
     } catch (error) {
-      setError("Invalid email or password");
+      dispatch(signInFailure("Failed to login"));
       console.error("Login error:", error);
     }
   };

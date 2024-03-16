@@ -14,6 +14,9 @@ import TeacherHome from "./pages/teacher/TeacherHome";
 import TeacherProfile from "./pages/teacher/TeacherProfile";
 import TeacherLogin from "./pages/teacher/TeacherLogin";
 import StudentLogin from "./pages/student/StudentLogin";
+import PrivateAdminRoute from "./components/admin/PrivateAdminRoute";
+import PrivateStudentRoute from "./components/student/PrivateStudentRoute";
+import PrivateTeacherRoute from "./components/teacher/PrivateTeacherRoute";
 
 function App() {
   return (
@@ -21,21 +24,27 @@ function App() {
       <Routes>
         {/* Admin Routes */}
         <Route path="admin/login" element={<AdminLogin />} />
-        <Route path="admin/home" element={<AdminHome />} />
-        <Route path="admin/profile" element={<AdminProfile />} />
-        <Route path="admin/manage-teachers" element={<ManageTeachers />} />
-        <Route path="admin/add-teachers" element={<AddTeachers />} />
-        <Route path="admin/manage-students" element={<ManageStudents />} />
-        <Route path="admin/add-students" element={<AddStudents />} />
-        <Route path="admin/courses" element={<Courses />} />
+        <Route element={<PrivateAdminRoute />}>
+          <Route path="admin/home" element={<AdminHome />} />
+          <Route path="admin/profile" element={<AdminProfile />} />
+          <Route path="admin/manage-teachers" element={<ManageTeachers />} />
+          <Route path="admin/add-teachers" element={<AddTeachers />} />
+          <Route path="admin/manage-students" element={<ManageStudents />} />
+          <Route path="admin/add-students" element={<AddStudents />} />
+          <Route path="admin/courses" element={<Courses />} />
+        </Route>
         {/* Student Routes */}
         <Route path="student/login" element={<StudentLogin />} />
-        <Route path="student/home" element={<StudentHome />} />
-        <Route path="student/profile" element={<StudentProfile />} />
+        <Route element={<PrivateStudentRoute />}>
+          <Route path="student/home" element={<StudentHome />} />
+          <Route path="student/profile" element={<StudentProfile />} />
+        </Route>
         {/* teacher Routes */}
         <Route path="teacher/login" element={<TeacherLogin />} />
-        <Route path="teacher/home" element={<TeacherHome />} />
-        <Route path="teacher/profile" element={<TeacherProfile />} />
+        <Route element={<PrivateTeacherRoute />}>
+          <Route path="teacher/home" element={<TeacherHome />} />
+          <Route path="teacher/profile" element={<TeacherProfile />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

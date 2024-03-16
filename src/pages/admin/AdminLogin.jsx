@@ -13,7 +13,7 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.user);
+  const { error } = useSelector((state) => state.user);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +21,7 @@ function AdminLogin() {
     try {
       dispatch(signInStart());
       const response = await axios.post("/admin/login", { email, password });
-      const data = response.data.result.admin;
+      const data = response.data.result;
 
       localStorage.setItem("token", data.token);
 
@@ -29,7 +29,7 @@ function AdminLogin() {
         dispatch(signInFailure(data));
       } else {
         console.log("Login successful", data);
-        dispatch(signInSuccess(data._doc));
+        dispatch(signInSuccess(data.admin));
         navigate("/admin/home");
       }
     } catch (error) {
