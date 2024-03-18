@@ -1,19 +1,20 @@
-import AdminSideBar from "../../components/admin/AdminSideBar";
-import { getStorage } from "firebase/storage";
-import { app } from "../../firebase";
-import { useEffect, useState } from "react";
-import axios from "../../services/axiosService";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "../../services/axiosService";
+import AdminSideBar from "../../components/admin/AdminSideBar";
 
 function AdminProfile() {
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState({});
   const [errors, setErrors] = useState({});
   const { currentUser } = useSelector((state) => state.user);
+  const [modifiedFields, setModifiedFields] = useState({});
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`/admin/get-admin/${currentUser._id}`);
+        const response = await axios.get(
+          `/admin/get-admin/${currentUser._id}`
+        );
         setProfileData(response.data.admin);
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -21,20 +22,20 @@ function AdminProfile() {
     };
 
     fetchProfileData();
-  }, []);
+  }, [currentUser._id]);
 
   const validateForm = () => {
     let valid = true;
     const newErrors = {};
 
     // Validate name
-    if (!profileData?.name.trim()) {
+    if (!profileData.name?.trim()) {
       newErrors.name = "Name is required";
       valid = false;
     }
 
     // Validate date of birth
-    if (!profileData?.dob.trim()) {
+    if (!profileData.dob?.trim()) {
       newErrors.dob = "Date of Birth is required";
       valid = false;
     } else {
@@ -49,22 +50,19 @@ function AdminProfile() {
     }
 
     // Validate gender
-    if (!profileData?.gender.trim()) {
+    if (!profileData.gender?.trim()) {
       newErrors.gender = "Gender is required";
       valid = false;
     }
 
     // Validate phone number
-    if (
-      !profileData?.phonenumber ||
-      !/^\d{10}$/.test(profileData.phonenumber)
-    ) {
+    if (!profileData.phonenumber || !/^\d{10}$/.test(profileData.phonenumber)) {
       newErrors.phonenumber = "Enter a valid Phone Number";
       valid = false;
     }
 
     // Validate password
-    if (!profileData?.password.trim()) {
+    if (!profileData.password?.trim()) {
       newErrors.password = "Password is required";
       valid = false;
     }
@@ -73,12 +71,17 @@ function AdminProfile() {
     return valid;
   };
 
+  const handleFieldChange = (fieldName, value) => {
+    setProfileData({ ...profileData, [fieldName]: value });
+    setModifiedFields({ ...modifiedFields, [fieldName]: value });
+  };
+
   const updateProfile = async () => {
     try {
       if (validateForm()) {
         const response = await axios.put(
           `/admin/update-admin/${currentUser._id}`,
-          profileData
+          modifiedFields
         );
         console.log("Profile updated successfully:", response.data);
       }
@@ -97,7 +100,7 @@ function AdminProfile() {
         <div className="flex items-center justify-center mb-6">
           <div className="h-44 w-44 rounded-full overflow-hidden bg-white">
             <img
-              src={profileData?.avatar}
+              src={profileData.avatar}
               alt="Profile"
               className="h-full w-full object-cover"
             />
@@ -113,10 +116,8 @@ function AdminProfile() {
               type="text"
               id="name"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.name}
-              onChange={(e) =>
-                setProfileData({ ...profileData, name: e.target.value })
-              }
+              value={profileData.name || ""}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
             />
           </div>
           <div>
@@ -128,10 +129,8 @@ function AdminProfile() {
               type="text"
               id="dob"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.dob}
-              onChange={(e) =>
-                setProfileData({ ...profileData, dob: e.target.value })
-              }
+              value={profileData.dob || ""}
+              onChange={(e) => handleFieldChange("dob", e.target.value)}
             />
           </div>
           <div>
@@ -142,10 +141,8 @@ function AdminProfile() {
             <select
               id="gender"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.gender}
-              onChange={(e) =>
-                setProfileData({ ...profileData, gender: e.target.value })
-              }
+              value={profileData.gender || ""}
+              onChange={(e) => handleFieldChange("gender", e.target.value)}
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -164,10 +161,8 @@ function AdminProfile() {
               type="text"
               id="phone"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.phonenumber}
-              onChange={(e) =>
-                setProfileData({ ...profileData, phonenumber: e.target.value })
-              }
+              value={profileData.phonenumber || ""}
+              onChange={(e) => handleFieldChange("phonenumber", e.target.value)}
             />
           </div>
           <div>
@@ -178,7 +173,7 @@ function AdminProfile() {
               type="email"
               id="email"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.email}
+              value={profileData.email || ""}
               disabled
             />
           </div>
@@ -193,10 +188,7 @@ function AdminProfile() {
               type="password"
               id="password"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.password}
-              onChange={(e) =>
-                setProfileData({ ...profileData, name: e.target.value })
-              }
+              onChange={(e) => handleFieldChange("password", e.target.value)}
             />
           </div>
         </div>

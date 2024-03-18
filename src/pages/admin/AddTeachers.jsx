@@ -14,6 +14,20 @@ function AddTeachers() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (
+      name.trim() === "" ||
+      email.trim() === "" ||
+      subject.trim() === "" ||
+      gender.trim() === ""
+    ) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     try {
       const newTeacher = { name, email, subject, gender };
       const response = await axios.post("/admin/add-teacher", newTeacher);

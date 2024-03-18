@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import { getStorage } from "firebase/storage";
 import { app } from "../../firebase";
@@ -33,6 +33,23 @@ function AddStudents() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (
+      name.trim() === "" ||
+      email.trim() === "" ||
+      course.trim() === "" ||
+      batch.trim() === "" ||
+      gender.trim() === ""
+    ) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     const newStudent = {
       name,
       email,

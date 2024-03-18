@@ -7,6 +7,7 @@ function StudentProfile() {
   const [profileData, setProfileData] = useState({});
   const [errors, setErrors] = useState({});
   const { currentUser } = useSelector((state) => state.user);
+  const [modifiedFields, setModifiedFields] = useState({});
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -21,20 +22,20 @@ function StudentProfile() {
     };
 
     fetchProfileData();
-  }, []);
+  }, [currentUser._id]);
 
   const validateForm = () => {
     let valid = true;
     const newErrors = {};
 
     // Validate name
-    if (!profileData?.name.trim()) {
+    if (!profileData.name?.trim()) {
       newErrors.name = "Name is required";
       valid = false;
     }
 
     // Validate date of birth
-    if (!profileData?.dob.trim()) {
+    if (!profileData.dob?.trim()) {
       newErrors.dob = "Date of Birth is required";
       valid = false;
     } else {
@@ -49,14 +50,14 @@ function StudentProfile() {
     }
 
     // Validate gender
-    if (!profileData?.gender.trim()) {
+    if (!profileData.gender?.trim()) {
       newErrors.gender = "Gender is required";
       valid = false;
     }
 
     // Validate phone number
     if (
-      !profileData?.phonenumber ||
+      !profileData.phonenumber ||
       !/^\d{10}$/.test(profileData.phonenumber)
     ) {
       newErrors.phonenumber = "Enter a valid Phone Number";
@@ -64,7 +65,7 @@ function StudentProfile() {
     }
 
     // Validate password
-    if (!profileData?.password.trim()) {
+    if (!profileData.password?.trim()) {
       newErrors.password = "Password is required";
       valid = false;
     }
@@ -73,12 +74,17 @@ function StudentProfile() {
     return valid;
   };
 
+  const handleFieldChange = (fieldName, value) => {
+    setProfileData({ ...profileData, [fieldName]: value });
+    setModifiedFields({ ...modifiedFields, [fieldName]: value });
+  };
+
   const updateProfile = async () => {
     try {
       if (validateForm()) {
         const response = await axios.put(
           `/student/update-student/${currentUser._id}`,
-          profileData
+          modifiedFields
         );
         console.log("Profile updated successfully:", response.data);
       }
@@ -113,10 +119,8 @@ function StudentProfile() {
               type="text"
               id="name"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.name}
-              onChange={(e) =>
-                setProfileData({ ...profileData, name: e.target.value })
-              }
+              value={profileData.name || ""}
+              onChange={(e) => handleFieldChange("name", e.target.value)}
             />
           </div>
           <div>
@@ -128,10 +132,8 @@ function StudentProfile() {
               type="text"
               id="dob"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.dob}
-              onChange={(e) =>
-                setProfileData({ ...profileData, dob: e.target.value })
-              }
+              value={profileData.dob || ""}
+              onChange={(e) => handleFieldChange("dob", e.target.value)}
             />
           </div>
           <div>
@@ -142,10 +144,8 @@ function StudentProfile() {
             <select
               id="gender"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.gender}
-              onChange={(e) =>
-                setProfileData({ ...profileData, gender: e.target.value })
-              }
+              value={profileData.gender || ""}
+              onChange={(e) => handleFieldChange("gender", e.target.value)}
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -164,10 +164,8 @@ function StudentProfile() {
               type="text"
               id="phone"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.phonenumber}
-              onChange={(e) =>
-                setProfileData({ ...profileData, phonenumber: e.target.value })
-              }
+              value={profileData.phonenumber || ""}
+              onChange={(e) => handleFieldChange("phonenumber", e.target.value)}
             />
           </div>
           <div>
@@ -178,7 +176,7 @@ function StudentProfile() {
               type="email"
               id="email"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value={profileData?.email}
+              value={profileData.email || ""}
               disabled
             />
           </div>
@@ -193,10 +191,7 @@ function StudentProfile() {
               type="password"
               id="password"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
-              value=""
-              onChange={(e) =>
-                setProfileData({ ...profileData, password: e.target.value })
-              }
+              onChange={(e) => handleFieldChange("password", e.target.value)}
             />
           </div>
           <div>
