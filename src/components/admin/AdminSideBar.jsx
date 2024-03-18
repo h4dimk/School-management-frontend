@@ -79,6 +79,14 @@ function AdminSideBar() {
               Courses
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/admin/batches"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Batches
+            </a>
+          </li>
           <li className="mt-10">
             <button
               onClick={handleLogout}

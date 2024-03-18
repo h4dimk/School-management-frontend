@@ -12,10 +12,12 @@ function AddStudents() {
   const [gender, setGender] = useState("");
   // const [avatar, setAvatar] = useState("");
   const [coursesList, setCoursesList] = useState([]);
+  const [batchesList, setBatchesList] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     fetchCourses();
+    fetchBatches();
   }, []);
 
   const fetchCourses = async () => {
@@ -28,6 +30,19 @@ function AddStudents() {
       }
     } catch (error) {
       console.error("Error fetching courses:", error);
+    }
+  };
+
+  const fetchBatches = async () => {
+    try {
+      const response = await axios.get("/admin/get-batches");
+      if (response.data) {
+        setBatchesList(response.data);
+      } else {
+        console.error("Response data is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error fetching batches:", error);
     }
   };
 
@@ -139,14 +154,20 @@ function AddStudents() {
               <label htmlFor="batch" className="text-white font-medium">
                 Batch:
               </label>
-              <input
-                type="text"
+              <select
                 id="batch"
                 value={batch}
                 onChange={(e) => setBatch(e.target.value)}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white"
                 required
-              />
+              >
+                <option value="">Select Batch</option>
+                {batchesList.map((batch) => (
+                  <option key={batch._id} value={batch.batch}>
+                    {batch.batch}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="mb-4">
               <label htmlFor="gender" className="text-white font-medium">

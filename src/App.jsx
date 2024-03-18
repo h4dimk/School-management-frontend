@@ -17,6 +17,7 @@ import StudentLogin from "./pages/student/StudentLogin";
 import PrivateAdminRoute from "./components/admin/PrivateAdminRoute";
 import PrivateStudentRoute from "./components/student/PrivateStudentRoute";
 import PrivateTeacherRoute from "./components/teacher/PrivateTeacherRoute";
+import ManageBatches from "./pages/admin/ManageBatches";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="admin/manage-students" element={<ManageStudents />} />
           <Route path="admin/add-students" element={<AddStudents />} />
           <Route path="admin/courses" element={<Courses />} />
+          <Route path="admin/batches" element={<ManageBatches />} />
         </Route>
         {/* Student Routes */}
         <Route path="student/login" element={<StudentLogin />} />
