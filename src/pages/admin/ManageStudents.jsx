@@ -37,6 +37,10 @@ function ManageStudents() {
   };
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this student?"
+    );
+    if (!confirmDelete) return;
     try {
       await axios.delete(`/admin/remove-student/${id}`);
       const updatedFilteredStudents = filteredStudents.filter(
@@ -83,7 +87,7 @@ function ManageStudents() {
                 <img
                   src={student.avatar}
                   alt="Avatar"
-                  className="w-12 h-12 rounded-full"
+                  className="w-20 h-20 rounded-full object-cover"
                 />
                 <div>
                   <h3 className="text-lg font-semibold">{student.name}</h3>

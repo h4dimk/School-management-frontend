@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { getAuth, updateProfile } from "firebase/auth";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import axios from "../../services/axiosService";
 import StudentSideBar from "../../components/student/StudentSideBar";
 
@@ -8,6 +15,10 @@ function StudentProfile() {
   const [errors, setErrors] = useState({});
   const { currentUser } = useSelector((state) => state.user);
   const [modifiedFields, setModifiedFields] = useState({});
+  const fileRef = useRef(null);
+  const [image, setImage] = useState(undefined);
+  const [imagePerc, setImagePerc] = useState(0);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -23,6 +34,55 @@ function StudentProfile() {
 
     fetchProfileData();
   }, [currentUser._id]);
+
+  const handleFileUpload = async (image) => {
+    const storage = getStorage();
+    const fileName = new Date().getTime() + image.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImagePerc(Math.round(progress));
+      },
+      (error) => {
+        setImageError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setProfileData({ ...profileData, avatar: downloadURL });
+          setModifiedFields({ ...modifiedFields, avatar: downloadURL });
+          updateProfileInAuth(downloadURL);
+        });
+      }
+    );
+  };
+
+  const updateProfileInAuth = async (downloadURL) => {
+    const auth = getAuth();
+    await updateProfile(auth.currentUser, {
+      photoURL: downloadURL,
+    })
+      .then(() => {
+        console.log("Profile picture updated in Firebase Auth");
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating profile picture in Firebase Auth:",
+          error
+        );
+      });
+  };
+
+  const handleAvatarChange = (e) => {
+    setImage(e.target.files[0]);
+    if (e.target.files[0]) {
+      handleFileUpload(e.target.files[0]);
+    }
+  };
 
   const validateForm = () => {
     let valid = true;
@@ -56,10 +116,7 @@ function StudentProfile() {
     }
 
     // Validate phone number
-    if (
-      !profileData.phonenumber ||
-      !/^\d{10}$/.test(profileData.phonenumber)
-    ) {
+    if (!profileData.phonenumber || !/^\d{10}$/.test(profileData.phonenumber)) {
       newErrors.phonenumber = "Enter a valid Phone Number";
       valid = false;
     }
@@ -101,13 +158,19 @@ function StudentProfile() {
         <h2 className="text-3xl font-semibold mb-4 text-white">Profile</h2>
 
         <div className="flex items-center justify-center mb-6">
-          <div className="h-44 w-44 rounded-full overflow-hidden bg-white">
-            <img
-              src={profileData?.avatar}
-              alt="Profile"
-              className="h-full w-full object-cover"
-            />
-          </div>
+          <input
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+            onChange={handleAvatarChange}
+          />
+          <img
+            src={profileData.avatar}
+            alt="Profile"
+            className="h-44 w-44  cursor-pointer rounded-full object-cover"
+            onClick={() => fileRef.current.click()}
+          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-zinc-600">
           <div>

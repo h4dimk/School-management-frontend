@@ -22,7 +22,7 @@ function ManageBatches() {
   const addBatch = async () => {
     try {
       await axios.post("/admin/add-batch", { batch: newBatchName });
-      setNewBatchName(""); 
+      setNewBatchName("");
       getBatches();
     } catch (error) {
       console.error("Error adding batch:", error);
@@ -30,6 +30,10 @@ function ManageBatches() {
   };
 
   const removeBatch = async (batchId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this batch?"
+    );
+    if (!confirmDelete) return;
     try {
       await axios.delete(`/admin/remove-batch/${batchId}`);
       getBatches();

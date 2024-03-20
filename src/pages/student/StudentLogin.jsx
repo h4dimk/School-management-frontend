@@ -33,7 +33,7 @@ function StudentLogin() {
         navigate("/student/home");
       }
     } catch (error) {
-      dispatch(signInFailure("Failed to login"));
+      dispatch(signInFailure("Invalid email or password"));
       console.error("Login error:", error);
     }
   };

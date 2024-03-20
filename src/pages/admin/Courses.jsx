@@ -48,6 +48,10 @@ function Courses() {
   };
 
   const handleRemoveCourse = async (index) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this Course?"
+    );
+    if (!confirmDelete) return;
     try {
       await axios.delete(`/admin/remove-course/${coursesList[index]._id}`);
       const newCoursesList = [...coursesList];

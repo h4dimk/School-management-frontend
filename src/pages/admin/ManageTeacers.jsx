@@ -37,6 +37,11 @@ function ManageTeachers() {
   };
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this teacher?"
+    );
+    if (!confirmDelete) return;
+
     try {
       await axios.delete(`/admin/remove-teacher/${id}`);
       const updatedFilteredTeachers = filteredTeachers.filter(
@@ -83,7 +88,7 @@ function ManageTeachers() {
                 <img
                   src={teacher.avatar}
                   alt="Avatar"
-                  className="w-12 h-12 rounded-full"
+                  className="w-20 h-20 rounded-full object-cover"
                 />
                 <div>
                   <h3 className="text-lg font-semibold">{teacher.name}</h3>
