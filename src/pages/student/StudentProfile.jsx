@@ -19,6 +19,7 @@ function StudentProfile() {
   const [image, setImage] = useState(undefined);
   const [imagePerc, setImagePerc] = useState(0);
   const [imageError, setImageError] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -34,6 +35,12 @@ function StudentProfile() {
 
     fetchProfileData();
   }, [currentUser._id]);
+
+  useEffect(() => {
+    if (image) {
+      handleFileUpload(image);
+    }
+  }, [image]);
 
   const handleFileUpload = async (image) => {
     const storage = getStorage();
@@ -55,33 +62,9 @@ function StudentProfile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setProfileData({ ...profileData, avatar: downloadURL });
           setModifiedFields({ ...modifiedFields, avatar: downloadURL });
-          updateProfileInAuth(downloadURL);
         });
       }
     );
-  };
-
-  const updateProfileInAuth = async (downloadURL) => {
-    const auth = getAuth();
-    await updateProfile(auth.currentUser, {
-      photoURL: downloadURL,
-    })
-      .then(() => {
-        console.log("Profile picture updated in Firebase Auth");
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating profile picture in Firebase Auth:",
-          error
-        );
-      });
-  };
-
-  const handleAvatarChange = (e) => {
-    setImage(e.target.files[0]);
-    if (e.target.files[0]) {
-      handleFileUpload(e.target.files[0]);
-    }
   };
 
   const validateForm = () => {
@@ -144,6 +127,9 @@ function StudentProfile() {
           modifiedFields
         );
         console.log("Profile updated successfully:", response.data);
+        setUpdateSuccess(true);
+        setImagePerc(0);
+        setTimeout(() => setUpdateSuccess(false), 5000);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -157,20 +143,37 @@ function StudentProfile() {
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-3xl font-semibold mb-4 text-white">Profile</h2>
 
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex flex-col items-center justify-center mb-6">
           <input
             type="file"
             ref={fileRef}
             hidden
             accept="image/*"
-            onChange={handleAvatarChange}
+            onChange={(e) => setImage(e.target.files[0])}
           />
           <img
             src={profileData.avatar}
             alt="Profile"
-            className="h-44 w-44  cursor-pointer rounded-full object-cover"
+            className="h-44 w-44 cursor-pointer rounded-full object-cover mb-2"
             onClick={() => fileRef.current.click()}
           />
+          <p className="text-sm self-center">
+            {imageError ? (
+              <span className="text-red-500">
+                Error uploading image (file size must be less than 2MB)
+              </span>
+            ) : imagePerc > 0 && imagePerc < 100 ? (
+              <span className="text-gray-300">
+                {`Uploading : ${imagePerc}%`}
+              </span>
+            ) : imagePerc === 100 ? (
+              <span className="text-green-500">
+                Image uploaded successfully
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-zinc-600">
           <div>
@@ -283,6 +286,11 @@ function StudentProfile() {
             />
           </div>
         </div>
+        {updateSuccess && (
+          <div className=" text-green-500  mt-4">
+            Profile updated successfully!
+          </div>
+        )}
         <button
           className="rounded-md bg-zinc-600 text-white hover:bg-zinc-700 font-bold py-2 px-4 mt-4"
           onClick={updateProfile}
