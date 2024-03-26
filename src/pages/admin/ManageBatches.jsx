@@ -21,7 +21,7 @@ function ManageBatches() {
 
   const addBatch = async () => {
     try {
-      await axios.post("/admin/add-batch", { batch: newBatchName });
+      await axios.post("/admin/add-batch", { name: newBatchName });
       setNewBatchName("");
       getBatches();
     } catch (error) {
@@ -43,9 +43,9 @@ function ManageBatches() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <AdminSideBar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-4 text-white">Batches</h2>
         {/* Input field for adding new batch */}
         <div className="flex mb-4">
@@ -70,7 +70,7 @@ function ManageBatches() {
               key={batch._id}
               className="flex items-center justify-between mb-2"
             >
-              <span className="text-white">{batch.batch}</span>
+              <span className="text-white">{batch.name}</span>
               <button
                 className="rounded-md bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2"
                 onClick={() => removeBatch(batch._id)}

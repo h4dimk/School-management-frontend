@@ -13,7 +13,7 @@ function TeacherSideBar() {
   return (
     <div
       className="flex flex-col h-full bg-zinc-700 text-white p-4"
-      style={{ width: "250px" }}
+      style={{ width: "220px", position: "fixed", top: 0, left: 0, bottom: 0 }}
     >
       <div className="flex items-center justify-center mb-8">
         {/* Your student logo or branding */}

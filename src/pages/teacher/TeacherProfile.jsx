@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { getAuth, updateProfile } from "firebase/auth";
 import {
   getStorage,
   ref,
@@ -137,10 +136,10 @@ function TeacherProfile() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <TeacherSideBar />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-4 text-white">Profile</h2>
 
         <div className="flex flex-col items-center justify-center mb-6">

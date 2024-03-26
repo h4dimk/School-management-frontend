@@ -8,7 +8,7 @@ function AddStudents() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [course, setCourse] = useState("");
-  const [batch, setBatch] = useState("");
+  const [batch, setBatch] = useState({ id: "", name: "" });
   const [gender, setGender] = useState("");
   // const [avatar, setAvatar] = useState("");
   const [coursesList, setCoursesList] = useState([]);
@@ -53,7 +53,7 @@ function AddStudents() {
       name.trim() === "" ||
       email.trim() === "" ||
       course.trim() === "" ||
-      batch.trim() === "" ||
+      batch.name.trim() === "" ||
       gender.trim() === ""
     ) {
       setError("Please fill in all fields.");
@@ -69,7 +69,8 @@ function AddStudents() {
       name,
       email,
       course,
-      batch,
+      batch: batch.name,
+      batchId: batch.id,
       gender,
     };
     try {
@@ -99,9 +100,9 @@ function AddStudents() {
   // };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <AdminSideBar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-4 text-white">Add Student</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -156,15 +157,20 @@ function AddStudents() {
               </label>
               <select
                 id="batch"
-                value={batch}
-                onChange={(e) => setBatch(e.target.value)}
+                value={batch.name}
+                onChange={(e) => {
+                  const selectedBatch = batchesList.find(
+                    (b) => b.name === e.target.value
+                  );
+                  setBatch({ id: selectedBatch._id, name: e.target.value });
+                }}
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white"
                 required
               >
                 <option value="">Select Batch</option>
                 {batchesList.map((batch) => (
-                  <option key={batch._id} value={batch.batch}>
-                    {batch.batch}
+                  <option key={batch._id} value={batch.name}>
+                    {batch.name}
                   </option>
                 ))}
               </select>
@@ -181,8 +187,8 @@ function AddStudents() {
                 required
               >
                 <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
             </div>
             {/* <div className="mb-4">

@@ -3,7 +3,7 @@ import AdminSideBar from "../../components/admin/AdminSideBar";
 
 function AdminHome() {
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <AdminSideBar />
     </div>
   );

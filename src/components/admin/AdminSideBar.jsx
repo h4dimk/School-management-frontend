@@ -15,7 +15,7 @@ function AdminSideBar() {
   return (
     <div
       className="flex flex-col h-full bg-zinc-700 text-white p-4"
-      style={{ width: "250px" }}
+      style={{ width: "220px", position: "fixed", top: 0, left: 0, bottom: 0 }}
     >
       <div className="flex items-center justify-center mb-8">
         {/* <img src={logo} alt="Logo" className="w-16 h-16" /> Adjust width and height as needed */}
@@ -85,6 +85,14 @@ function AdminSideBar() {
               className="text-lg text-gray-300 hover:text-white"
             >
               Batches
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              href="/admin/announce"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Announcement
             </a>
           </li>
           <li className="mt-10">

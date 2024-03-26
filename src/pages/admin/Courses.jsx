@@ -78,9 +78,9 @@ function Courses() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <AdminSideBar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-6 text-white">Courses</h2>
         <div className="flex flex-col md:flex-row">
           <div className=" h-2/5 w-full md:w-1/2 bg-gray-200 p-6 rounded-md shadow-md mb-6 md:mr-4">

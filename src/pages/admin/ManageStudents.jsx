@@ -62,9 +62,9 @@ function ManageStudents() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <AdminSideBar />
-      <div className="container mx-auto px-4 py-8 ">
+      <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-4 text-white">
           Manage Students
         </h2>

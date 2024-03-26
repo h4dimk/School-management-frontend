@@ -3,7 +3,7 @@ import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 
 function TeacherHome() {
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <TeacherSideBar />
     </div>
   );
