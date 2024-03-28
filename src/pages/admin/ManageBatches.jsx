@@ -5,6 +5,7 @@ import axios from "../../services/axiosService";
 function ManageBatches() {
   const [batches, setBatches] = useState([]);
   const [newBatchName, setNewBatchName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getBatches();
@@ -20,9 +21,15 @@ function ManageBatches() {
   };
 
   const addBatch = async () => {
+    const batchFormatRegex = /^\d{4}-\d{4}$/;
+    if (!batchFormatRegex.test(newBatchName)) {
+      setErrorMessage("Batch name must be in the format YYYY-YYYY");
+      return;
+    }
     try {
       await axios.post("/admin/add-batch", { name: newBatchName });
       setNewBatchName("");
+      setErrorMessage("");
       getBatches();
     } catch (error) {
       console.error("Error adding batch:", error);
@@ -47,7 +54,6 @@ function ManageBatches() {
       <AdminSideBar />
       <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-4 text-white">Batches</h2>
-        {/* Input field for adding new batch */}
         <div className="flex mb-4">
           <input
             type="text"
@@ -63,7 +69,7 @@ function ManageBatches() {
             Add
           </button>
         </div>
-        {/* List of added batches with remove button */}
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <ul className="text-zinc-600">
           {batches.map((batch) => (
             <li

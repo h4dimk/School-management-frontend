@@ -273,6 +273,19 @@ function TeacherProfile() {
               disabled
             />
           </div>
+          <div>
+            <label htmlFor="subject" className="text-white font-medium">
+              Assigned Batch:
+            </label>
+
+            <input
+              type="text"
+              id="batch"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white mt-2"
+              value={profileData.batch || ""}
+              disabled
+            />
+          </div>
         </div>
         {updateSuccess && (
           <div className=" text-green-500  mt-4">

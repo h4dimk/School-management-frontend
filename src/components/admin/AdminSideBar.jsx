@@ -89,7 +89,7 @@ function AdminSideBar() {
           </li>
           <li className="mb-4">
             <a
-              href="/admin/announce"
+              href="/admin/announcement"
               className="text-lg text-gray-300 hover:text-white"
             >
               Announcement

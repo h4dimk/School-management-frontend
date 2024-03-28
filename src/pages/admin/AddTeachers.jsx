@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../services/axiosService";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import { getStorage } from "firebase/storage";
@@ -9,8 +9,27 @@ function AddTeachers() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [gender, setGender] = useState("");
+  const [batch, setBatch] = useState({ id: "", name: "" });
+  const [batchesList, setBatchesList] = useState([]);
   // const [avatar, setAvatar] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchBatches();
+  }, []);
+
+  const fetchBatches = async () => {
+    try {
+      const response = await axios.get("/admin/get-batches");
+      if (response.data) {
+        setBatchesList(response.data);
+      } else {
+        console.error("Response data is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error fetching batches:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,6 +37,7 @@ function AddTeachers() {
       name.trim() === "" ||
       email.trim() === "" ||
       subject.trim() === "" ||
+      batch.name.trim() === "" ||
       gender.trim() === ""
     ) {
       setError("Please fill in all fields.");
@@ -29,7 +49,14 @@ function AddTeachers() {
       return;
     }
     try {
-      const newTeacher = { name, email, subject, gender };
+      const newTeacher = {
+        name,
+        email,
+        subject,
+        gender,
+        batch: batch.name,
+        batchId: batch.id,
+      };
       const response = await axios.post("/admin/add-teacher", newTeacher);
       console.log("Teacher added successfully", response.data);
       // Reset the form after successful submission
@@ -37,6 +64,7 @@ function AddTeachers() {
       setEmail("");
       setSubject("");
       setGender("");
+      setBatch("");
       // setAvatar("");
       setError("");
     } catch (error) {
@@ -114,8 +142,33 @@ function AddTeachers() {
                 required
               >
                 <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="batch" className="text-white font-medium">
+               Assign Batch:
+              </label>
+              <select
+                id="batch"
+                value={batch.name}
+                onChange={(e) => {
+                  const selectedBatch = batchesList.find(
+                    (b) => b.name === e.target.value
+                  );
+                  setBatch({ id: selectedBatch._id, name: e.target.value });
+                }}
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700 bg-white"
+                required
+              >
+                <option value="">Select Batch</option>
+                {batchesList.map((batch) => (
+                  <option key={batch._id} value={batch.name}>
+                    {batch.name}
+                  </option>
+                ))}
               </select>
             </div>
 

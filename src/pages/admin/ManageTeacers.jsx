@@ -104,6 +104,9 @@ function ManageTeachers() {
               </div>
               <p className="text-gray-700 mb-2">Subject: {teacher.subject}</p>
               <p className="text-gray-700 mb-2">Gender: {teacher.gender}</p>
+              <p className="text-gray-700 mb-2">
+                Assigned Batch: {teacher.batch}
+              </p>
 
               <div className="flex justify-between items-center">
                 <button

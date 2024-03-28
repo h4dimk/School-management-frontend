@@ -19,6 +19,9 @@ import PrivateStudentRoute from "./components/student/PrivateStudentRoute";
 import PrivateTeacherRoute from "./components/teacher/PrivateTeacherRoute";
 import ManageBatches from "./pages/admin/ManageBatches";
 import AdminAnounce from "./pages/admin/AdminAnounce";
+import StudentAnnouncement from "./pages/student/StudentAnnouncement";
+import TeacherAnnouncement from "./pages/teacher/TeacherAnnouncement";
+import TeacherBatch from "./pages/teacher/TeacherBatch";
 
 function App() {
   return (
@@ -35,19 +38,28 @@ function App() {
           <Route path="admin/add-students" element={<AddStudents />} />
           <Route path="admin/courses" element={<Courses />} />
           <Route path="admin/batches" element={<ManageBatches />} />
-          <Route path="admin/announce" element={<AdminAnounce />} />
+          <Route path="admin/announcement" element={<AdminAnounce />} />
         </Route>
         {/* Student Routes */}
         <Route path="student/login" element={<StudentLogin />} />
         <Route element={<PrivateStudentRoute />}>
           <Route path="student/home" element={<StudentHome />} />
           <Route path="student/profile" element={<StudentProfile />} />
+          <Route
+            path="student/announcement"
+            element={<StudentAnnouncement />}
+          />
         </Route>
         {/* teacher Routes */}
         <Route path="teacher/login" element={<TeacherLogin />} />
         <Route element={<PrivateTeacherRoute />}>
           <Route path="teacher/home" element={<TeacherHome />} />
           <Route path="teacher/profile" element={<TeacherProfile />} />
+          <Route path="teacher/batch" element={<TeacherBatch/>} />
+          <Route
+            path="teacher/announcement"
+            element={<TeacherAnnouncement />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
