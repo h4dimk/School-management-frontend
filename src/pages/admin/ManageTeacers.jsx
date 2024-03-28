@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 function ManageTeachers() {
   const [teachers, setTeachers] = useState([]);
   const [filteredTeachers, setFilteredTeachers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [teacherToRemove, setTeacherToRemove] = useState(null);
 
   useEffect(() => {
     // Fetch teachers data from the backend when the component mounts
@@ -37,20 +41,21 @@ function ManageTeachers() {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to remove this teacher?"
-    );
-    if (!confirmDelete) return;
+    setTeacherToRemove(id);
+    setIsOpen(true); // Open the popup
+  };
 
+  const confirmRemoveTeacher = async () => {
     try {
-      await axios.delete(`/admin/remove-teacher/${id}`);
+      await axios.delete(`/admin/remove-teacher/${teacherToRemove}`);
       const updatedFilteredTeachers = filteredTeachers.filter(
-        (teacher) => teacher._id !== id
+        (teacher) => teacher._id !== teacherToRemove
       );
       setFilteredTeachers(updatedFilteredTeachers);
     } catch (error) {
       console.error("Error deleting teacher:", error);
     }
+    setIsOpen(false); // Close the popup
   };
 
   const handleSearchChange = (event) => {
@@ -129,6 +134,32 @@ function ManageTeachers() {
             </div>
           ))}
         </div>
+        <Popup
+          open={isOpen}
+          closeOnDocumentClick
+          onClose={() => setIsOpen(false)}
+          modal
+        >
+          <div className="p-5">
+            <p className="text-lg font-semibold text-gray-700">
+              Are you sure you want to remove this teacher?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2 mr-2 rounded-md"
+                onClick={confirmRemoveTeacher}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-zinc-600 text-white hover:bg-zinc-700 font-bold py-1 px-2 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </Popup>
       </div>
     </div>
   );

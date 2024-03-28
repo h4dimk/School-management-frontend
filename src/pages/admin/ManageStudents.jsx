@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 function ManageStudents() {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [studentToRemove, setStudentToRemove] = useState(null);
 
   useEffect(() => {
-    // Fetch student data from the backend when the component mounts
     const fetchStudents = async () => {
       try {
         const response = await axios.get("/admin/get-students");
@@ -37,19 +40,21 @@ function ManageStudents() {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to remove this student?"
-    );
-    if (!confirmDelete) return;
+    setStudentToRemove(id);
+    setIsOpen(true);
+  };
+
+  const confirmRemoveStudent = async () => {
     try {
-      await axios.delete(`/admin/remove-student/${id}`);
+      await axios.delete(`/admin/remove-student/${studentToRemove}`);
       const updatedFilteredStudents = filteredStudents.filter(
-        (student) => student._id !== id
+        (student) => student._id !== studentToRemove
       );
       setFilteredStudents(updatedFilteredStudents);
     } catch (error) {
       console.error("Error deleting student:", error);
     }
+    setIsOpen(false);
   };
 
   const handleSearchChange = (event) => {
@@ -126,6 +131,32 @@ function ManageStudents() {
             </div>
           ))}
         </div>
+        <Popup
+          open={isOpen}
+          closeOnDocumentClick
+          onClose={() => setIsOpen(false)}
+          modal
+        >
+          <div className="p-5">
+            <p className="text-lg font-semibold text-gray-700">
+              Are you sure you want to remove this student?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2 mr-2 rounded-md"
+                onClick={confirmRemoveStudent}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-zinc-600 text-white hover:bg-zinc-700 font-bold py-1 px-2 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </Popup>
       </div>
     </div>
   );

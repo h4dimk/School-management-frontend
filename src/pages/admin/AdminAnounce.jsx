@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
+import Popup from "reactjs-popup"; // Import Popup from reactjs-popup
+import "reactjs-popup/dist/index.css";
 
 function AdminAnounce() {
   const [announcement, setAnnouncement] = useState("");
   const [announcements, setAnnouncements] = useState([]);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false); // State to control the popup visibility
+  const [announcementToRemove, setAnnouncementToRemove] = useState(null);
 
   const handleExpandMessage = (messageId) => {
     setExpandedMessageId(messageId === expandedMessageId ? null : messageId);
@@ -51,12 +55,18 @@ function AdminAnounce() {
   };
 
   const handleRemoveAnnouncement = async (id) => {
+    setAnnouncementToRemove(id);
+    setIsOpen(true);
+  };
+
+  const confirmRemoveAnnouncement = async () => {
     try {
-      await axios.delete(`/admin/remove-announcement/${id}`);
+      await axios.delete(`/admin/remove-announcement/${announcementToRemove}`);
       fetchAnnouncements();
     } catch (error) {
       console.error("Error removing announcement:", error);
     }
+    setIsOpen(false);
   };
 
   function truncateMessage(message, maxLength) {
@@ -148,6 +158,32 @@ function AdminAnounce() {
               </div>
             ))}
         </div>
+        <Popup
+          open={isOpen}
+          closeOnDocumentClick
+          onClose={() => setIsOpen(false)}
+          modal
+        >
+          <div className="p-5">
+            <p className="text-lg font-semibold text-gray-700">
+              Are you sure you want to remove this announcement?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2 mr-2 rounded-md"
+                onClick={confirmRemoveAnnouncement}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-zinc-600 text-white hover:bg-zinc-700 font-bold py-1 px-2 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </Popup>
       </div>
     </div>
   );
