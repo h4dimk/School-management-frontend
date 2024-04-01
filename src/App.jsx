@@ -22,6 +22,7 @@ import AdminAnounce from "./pages/admin/AdminAnounce";
 import StudentAnnouncement from "./pages/student/StudentAnnouncement";
 import TeacherAnnouncement from "./pages/teacher/TeacherAnnouncement";
 import TeacherBatch from "./pages/teacher/TeacherBatch";
+import TeacherAttendence from "./pages/teacher/TeacherAttendence";
 
 function App() {
   return (
@@ -55,7 +56,8 @@ function App() {
         <Route element={<PrivateTeacherRoute />}>
           <Route path="teacher/home" element={<TeacherHome />} />
           <Route path="teacher/profile" element={<TeacherProfile />} />
-          <Route path="teacher/batch" element={<TeacherBatch/>} />
+          <Route path="teacher/batch" element={<TeacherBatch />} />
+          <Route path="teacher/attendence" element={<TeacherAttendence />} />
           <Route
             path="teacher/announcement"
             element={<TeacherAnnouncement />}

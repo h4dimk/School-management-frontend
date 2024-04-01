@@ -59,7 +59,6 @@ function AddTeachers() {
       };
       const response = await axios.post("/admin/add-teacher", newTeacher);
       console.log("Teacher added successfully", response.data);
-      // Reset the form after successful submission
       setName("");
       setEmail("");
       setSubject("");

@@ -47,6 +47,14 @@ function TeacherSideBar() {
           </li>
           <li className="mb-4">
             <a
+              href="/teacher/attendence"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Attendence
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
               href="/teacher/announcement"
               className="text-lg text-gray-300 hover:text-white"
             >

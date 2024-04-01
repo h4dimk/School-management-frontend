@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../services/axiosService"; // Adjust the import path as necessary
+import axios from "../../services/axiosService";
 import { useSelector } from "react-redux";
 import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 
@@ -21,23 +21,22 @@ function TeacherBatch() {
     };
 
     fetchTeacher();
-  }, [currentUser._id]);
+  }, [currentUser._id]); 
 
   return (
     <div className="flex">
       <TeacherSideBar />
       <div className="container mx-auto px-4 py-8 ml-56">
-        <h2 className="text-3xl font-semibold mb-4 text-white">
-          Batch Information
-        </h2>
         {teacher && (
-          <div>
-            <h3 className="text-2xl font-semibold mb-2 text-white">
+          <>
+            <h2 className="text-3xl font-semibold mb-4 text-white">
               Batch: {teacher.batchId.name}
-            </h3>
-            <h4 className="text-xl font-semibold mb-2 text-white">Students:</h4>
-            {teacher && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </h2>
+            <div>
+              <h4 className="text-xl font-semibold mb-2 text-white">
+                Students:
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-3">
                 {teacher.batchId.students.map((student) => (
                   <div
                     key={student._id}
@@ -46,7 +45,7 @@ function TeacherBatch() {
                     <div className="flex items-center justify-between mb-4">
                       <img
                         src={student.avatar}
-                        alt="Avatar"
+                        alt={`${student.name}'s avatar`}
                         className="w-20 h-20 rounded-full object-cover"
                       />
                       <div>
@@ -69,14 +68,11 @@ function TeacherBatch() {
                     <p className="text-gray-700 mb-2">
                       Gender: {student.gender}
                     </p>
-                    <div className="flex justify-between items-center">
-                      {/* Placeholder for action buttons */}
-                    </div>
                   </div>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
+          </>
         )}
       </div>
     </div>
