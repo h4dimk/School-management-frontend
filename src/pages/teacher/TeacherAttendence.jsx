@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 function TeacherAttendance() {
   const [teacher, setTeacher] = useState(null);
+  const [attendanceDetails, setAttendenceDetails] = useState(null);
   const [presentStudents, setPresentStudents] = useState([]);
   const [absentStudents, setAbsentStudents] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
@@ -13,19 +14,26 @@ function TeacherAttendance() {
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    const fetchTeacher = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const teacherResponse = await axios.get(
           `/teacher/get-teacher/${currentUser._id}`
         );
-        const teacherWithBatchAndStudents = response.data.teacher;
-        setTeacher(teacherWithBatchAndStudents);
+        const teacherData = teacherResponse.data.teacher;
+        setTeacher(teacherData);
+
+        const attendanceResponse = await axios.get(
+          `/teacher/get-attendances/${teacherData.batchId._id}`
+        );
+        const attendanceData = attendanceResponse.data;
+        setAttendenceDetails(attendanceData);
       } catch (error) {
-        console.error("Error fetching teacher:", error);
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch data. Please try again later.");
       }
     };
 
-    fetchTeacher();
+    fetchData();
 
     // Set current date
     const today = new Date();
@@ -179,6 +187,77 @@ function TeacherAttendance() {
           </div>
           {error && <div className="text-red-500 mt-4">{error}</div>}
           {success && <div className="text-green-500 mt-4">{success}</div>}
+        </div>
+
+        <div className="mt-8">
+          <h4 className="text-xl font-semibold mb-4 text-white">
+            Attendance Details
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {attendanceDetails &&
+              attendanceDetails.attendance
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((entry, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-200 p-4 rounded-md shadow-md"
+                  >
+                    {/* Date heading */}
+                    <p className="font-semibold text-lg mb-2">
+                      {new Date(entry.date).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                    <div className="flex justify-between">
+                      {/* Present students */}
+                      <div>
+                        <p className="font-semibold mb-1 mt-3">
+                          Present Students: {entry.present.length}
+                        </p>
+                        <div className="flex flex-wrap items-center">
+                          {entry.present.map((student, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center mb-2 mr-4"
+                            >
+                              <img
+                                src={student.avatar}
+                                alt="Student Avatar"
+                                className="w-9 h-9 rounded-full object-cover mr-2"
+                              />
+                              <p>{student.name}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      {/* Absent students */}
+                      <div>
+                        <p className="font-semibold mb-1 mt-3">
+                          Absent Students: {entry.absent.length}
+                        </p>
+                        <div className="flex flex-wrap items-center">
+                          {entry.absent.map((student, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center mb-2 mr-4"
+                            >
+                              <img
+                                src={student.avatar}
+                                alt="Student Avatar"
+                                className="w-9 h-9 rounded-full object-cover mr-2"
+                              />
+                              <p>{student.name}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+          </div>
         </div>
       </div>
     </div>

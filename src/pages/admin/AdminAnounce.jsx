@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
-import Popup from "reactjs-popup"; // Import Popup from reactjs-popup
+import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+// import io from 'socket.io-client';
+// const socket = io();
 
 function AdminAnounce() {
   const [announcement, setAnnouncement] = useState("");
   const [announcements, setAnnouncements] = useState([]);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
-  const [isOpen, setIsOpen] = useState(false); // State to control the popup visibility
+  const [isOpen, setIsOpen] = useState(false);
   const [announcementToRemove, setAnnouncementToRemove] = useState(null);
 
   const handleExpandMessage = (messageId) => {
