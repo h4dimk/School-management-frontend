@@ -42,6 +42,15 @@ function StudentSideBar() {
           </li>
           <li className="mb-4">
             <a
+              href="/student/leave"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Apply Leave
+            </a>
+          </li>
+          
+          <li className="mb-4">
+            <a
               href="/student/announcement"
               className="text-lg text-gray-300 hover:text-white"
             >

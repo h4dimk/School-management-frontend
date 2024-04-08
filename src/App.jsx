@@ -23,6 +23,7 @@ import StudentAnnouncement from "./pages/student/StudentAnnouncement";
 import TeacherAnnouncement from "./pages/teacher/TeacherAnnouncement";
 import TeacherBatch from "./pages/teacher/TeacherBatch";
 import TeacherAttendence from "./pages/teacher/TeacherAttendence";
+import StudentLeave from "./pages/student/StudentLeave";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route element={<PrivateStudentRoute />}>
           <Route path="student/home" element={<StudentHome />} />
           <Route path="student/profile" element={<StudentProfile />} />
+          <Route path="student/leave" element={<StudentLeave />} />
           <Route
             path="student/announcement"
             element={<StudentAnnouncement />}
