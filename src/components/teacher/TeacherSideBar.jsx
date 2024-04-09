@@ -55,6 +55,22 @@ function TeacherSideBar() {
           </li>
           <li className="mb-4">
             <a
+              href="/teacher/apply-leave"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Apply leave
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              href="/teacher/leaves"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              leaves
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
               href="/teacher/announcement"
               className="text-lg text-gray-300 hover:text-white"
             >

@@ -23,7 +23,9 @@ import StudentAnnouncement from "./pages/student/StudentAnnouncement";
 import TeacherAnnouncement from "./pages/teacher/TeacherAnnouncement";
 import TeacherBatch from "./pages/teacher/TeacherBatch";
 import TeacherAttendence from "./pages/teacher/TeacherAttendence";
-import StudentLeave from "./pages/student/StudentLeave";
+import StudentApplyLeave from "./pages/student/StudentApplyLeave";
+import TeacherApplyLeave from "./pages/teacher/TeacherApplyLeave";
+import TeacherLeaves from "./pages/teacher/TeacherLeaves";
 
 function App() {
   return (
@@ -47,7 +49,7 @@ function App() {
         <Route element={<PrivateStudentRoute />}>
           <Route path="student/home" element={<StudentHome />} />
           <Route path="student/profile" element={<StudentProfile />} />
-          <Route path="student/leave" element={<StudentLeave />} />
+          <Route path="student/apply-leave" element={<StudentApplyLeave />} />
           <Route
             path="student/announcement"
             element={<StudentAnnouncement />}
@@ -60,6 +62,8 @@ function App() {
           <Route path="teacher/profile" element={<TeacherProfile />} />
           <Route path="teacher/batch" element={<TeacherBatch />} />
           <Route path="teacher/attendence" element={<TeacherAttendence />} />
+          <Route path="teacher/apply-leave" element={<TeacherApplyLeave />} />
+          <Route path="teacher/leaves" element={<TeacherLeaves/>}/>
           <Route
             path="teacher/announcement"
             element={<TeacherAnnouncement />}

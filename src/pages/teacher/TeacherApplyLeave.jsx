@@ -1,16 +1,32 @@
-import React, { useState } from "react";
-import StudentSideBar from "../../components/student/StudentSideBar";
-import axios from "../../services/axiosService";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "../../services/axiosService";
+import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 
-function StudentLeave() {
+function TeacherApplyLeave() {
   const [leaveType, setLeaveType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [teacherLeaves, setTeacherLeaves] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    fetchTeacherLeaves();
+  }, []);
+
+  const fetchTeacherLeaves = async () => {
+    try {
+      const response = await axios.get(
+        `/teacher/get-leaves/${currentUser._id}`
+      );
+      setTeacherLeaves(response.data.leaves);
+    } catch (error) {
+      console.error("Error fetching teacher leaves:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,13 +42,13 @@ function StudentLeave() {
     const endDateObj = new Date(endDate);
     if (startDateObj > endDateObj) {
       setError("Start date cannot be after end date");
-      setSuccessMessage("")
+      setSuccessMessage("");
       return;
     }
 
     try {
       const response = await axios.post(
-        `/student/apply-leave/${currentUser._id}`,
+        `/teacher/apply-leave/${currentUser._id}`,
         {
           leaveType,
           startDate,
@@ -49,6 +65,30 @@ function StudentLeave() {
     }
   };
 
+  const cancelLeave = async (leaveId) => {
+    try {
+      await axios.delete(`/teacher/cancel-leave/${leaveId}`);
+      fetchStudentLeaves();
+      setSuccessMessage("Leave canceled successfully.");
+    } catch (error) {
+      console.error("Error canceling leave:", error);
+      setError("Failed to cancel leave. Please try again later.");
+    }
+  };
+
+  function getStatusColorClass(status) {
+    switch (status) {
+      case "Pending":
+        return "text-yellow-400";
+      case "Accept":
+        return "text-green-500";
+      case "Reject":
+        return "text-red-500";
+      default:
+        return "";
+    }
+  }
+
   const resetForm = () => {
     setLeaveType("");
     setStartDate("");
@@ -59,7 +99,7 @@ function StudentLeave() {
 
   return (
     <div className="flex">
-      <StudentSideBar />
+      <TeacherSideBar />
       <div className="container mx-auto px-4 py-8 ml-56">
         <h2 className="text-3xl font-semibold mb-6 text-white">
           Leave Application
@@ -145,9 +185,49 @@ function StudentLeave() {
             Submit
           </button>
         </form>
+        {teacherLeaves.length > 0 && (
+          <div>
+            <h2 className="text-3xl font-semibold mb-6 mt-8 text-white">
+              Your Leaves
+            </h2>
+            <ul className="text-gray-700 ">
+              {teacherLeaves.map((leave) => (
+                <li key={leave.id} className="mb-8">
+                  <div className="bg-gray-200 p-4 rounded-md relative">
+                    <p className="text-lg">
+                      <span className="font-semibold">Start Date:</span>{" "}
+                      {new Date(leave.startDate).toLocaleDateString()}
+                    </p>
+                    <p className="text-lg">
+                      <span className="font-semibold">End Date:</span>{" "}
+                      {new Date(leave.endDate).toLocaleDateString()}
+                    </p>
+                    <p className="text-lg">
+                      <span className="font-semibold">Reason:</span>{" "}
+                      {leave.reason}
+                    </p>
+                    <p className="text-lg">
+                      <span className="font-semibold">Status:</span>{" "}
+                      <span className={`${getStatusColorClass(leave.status)}`}>
+                        {leave.status}
+                      </span>
+                    </p>
+
+                    <button
+                      onClick={() => cancelLeave(leave._id)}
+                      className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 absolute bottom-2 right-2"
+                    >
+                      Cancel Leave
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default StudentLeave;
+export default TeacherApplyLeave;
