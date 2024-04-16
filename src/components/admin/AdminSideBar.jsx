@@ -95,6 +95,14 @@ function AdminSideBar() {
               Announcement
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/admin/leaves"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Leaves
+            </a>
+          </li>
           <li className="mt-10">
             <button
               onClick={handleLogout}

@@ -59,6 +59,8 @@ function TeacherApplyLeave() {
       console.log("Leave application submitted:", response.data);
       setSuccessMessage("Leave application submitted successfully.");
       resetForm();
+
+      setTeacherLeaves([...teacherLeaves, response.data.leave]);
     } catch (error) {
       console.error("Error submitting leave application:", error);
       setError("Failed to submit leave application. Please try again later.");
@@ -68,8 +70,10 @@ function TeacherApplyLeave() {
   const cancelLeave = async (leaveId) => {
     try {
       await axios.delete(`/teacher/cancel-leave/${leaveId}`);
-      fetchStudentLeaves();
-      setSuccessMessage("Leave canceled successfully.");
+      const updatedLeaves = teacherLeaves.filter(
+        (leave) => leave._id !== leaveId
+      );
+      setTeacherLeaves(updatedLeaves);
     } catch (error) {
       console.error("Error canceling leave:", error);
       setError("Failed to cancel leave. Please try again later.");
@@ -80,9 +84,9 @@ function TeacherApplyLeave() {
     switch (status) {
       case "Pending":
         return "text-yellow-400";
-      case "Accept":
+      case "Accepted":
         return "text-green-500";
-      case "Reject":
+      case "Rejected":
         return "text-red-500";
       default:
         return "";
@@ -191,37 +195,43 @@ function TeacherApplyLeave() {
               Your Leaves
             </h2>
             <ul className="text-gray-700 ">
-              {teacherLeaves.map((leave) => (
-                <li key={leave.id} className="mb-8">
-                  <div className="bg-gray-200 p-4 rounded-md relative">
-                    <p className="text-lg">
-                      <span className="font-semibold">Start Date:</span>{" "}
-                      {new Date(leave.startDate).toLocaleDateString()}
-                    </p>
-                    <p className="text-lg">
-                      <span className="font-semibold">End Date:</span>{" "}
-                      {new Date(leave.endDate).toLocaleDateString()}
-                    </p>
-                    <p className="text-lg">
-                      <span className="font-semibold">Reason:</span>{" "}
-                      {leave.reason}
-                    </p>
-                    <p className="text-lg">
-                      <span className="font-semibold">Status:</span>{" "}
-                      <span className={`${getStatusColorClass(leave.status)}`}>
-                        {leave.status}
-                      </span>
-                    </p>
-
-                    <button
-                      onClick={() => cancelLeave(leave._id)}
-                      className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 absolute bottom-2 right-2"
-                    >
-                      Cancel Leave
-                    </button>
-                  </div>
-                </li>
-              ))}
+              {teacherLeaves
+                .slice()
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((leave) => (
+                  <li key={leave.id} className="mb-8">
+                    <div className="bg-gray-200 p-4 rounded-md relative">
+                      <p className="text-lg">
+                        <span className="font-semibold">Start Date:</span>{" "}
+                        {new Date(leave.startDate).toLocaleDateString()}
+                      </p>
+                      <p className="text-lg">
+                        <span className="font-semibold">End Date:</span>{" "}
+                        {new Date(leave.endDate).toLocaleDateString()}
+                      </p>
+                      <p className="text-lg">
+                        <span className="font-semibold">Reason:</span>{" "}
+                        {leave.reason}
+                      </p>
+                      <p className="text-lg">
+                        <span className="font-semibold">Status:</span>{" "}
+                        <span
+                          className={`${getStatusColorClass(leave.status)}`}
+                        >
+                          {leave.status}
+                        </span>
+                      </p>
+                      {leave.status !=="Accepted" && (
+                        <button
+                          onClick={() => cancelLeave(leave._id)}
+                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 absolute bottom-2 right-2"
+                        >
+                          Cancel Leave
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                ))}
             </ul>
           </div>
         )}

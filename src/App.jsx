@@ -25,7 +25,10 @@ import TeacherBatch from "./pages/teacher/TeacherBatch";
 import TeacherAttendence from "./pages/teacher/TeacherAttendence";
 import StudentApplyLeave from "./pages/student/StudentApplyLeave";
 import TeacherApplyLeave from "./pages/teacher/TeacherApplyLeave";
-import TeacherLeaves from "./pages/teacher/TeacherLeaves";
+import Leaves from "./pages/admin/Leaves";
+import TeachersBatchLeaves from "./pages/teacher/TeachersBatchLeaves";
+import BatchChatTeacher from "./pages/teacher/BatchChat";
+import BatchChatStudent from "./pages/student/BatchChat";
 
 function App() {
   return (
@@ -43,6 +46,7 @@ function App() {
           <Route path="admin/courses" element={<Courses />} />
           <Route path="admin/batches" element={<ManageBatches />} />
           <Route path="admin/announcement" element={<AdminAnounce />} />
+          <Route path="admin/leaves" element={<Leaves />} />
         </Route>
         {/* Student Routes */}
         <Route path="student/login" element={<StudentLogin />} />
@@ -50,6 +54,7 @@ function App() {
           <Route path="student/home" element={<StudentHome />} />
           <Route path="student/profile" element={<StudentProfile />} />
           <Route path="student/apply-leave" element={<StudentApplyLeave />} />
+          <Route path="student/chats" element={<BatchChatStudent />} />
           <Route
             path="student/announcement"
             element={<StudentAnnouncement />}
@@ -63,7 +68,8 @@ function App() {
           <Route path="teacher/batch" element={<TeacherBatch />} />
           <Route path="teacher/attendence" element={<TeacherAttendence />} />
           <Route path="teacher/apply-leave" element={<TeacherApplyLeave />} />
-          <Route path="teacher/leaves" element={<TeacherLeaves/>}/>
+          <Route path="teacher/leaves" element={<TeachersBatchLeaves />} />
+          <Route path="teacher/chats" element={<BatchChatTeacher />} />
           <Route
             path="teacher/announcement"
             element={<TeacherAnnouncement />}

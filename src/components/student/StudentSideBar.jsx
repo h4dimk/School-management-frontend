@@ -48,6 +48,14 @@ function StudentSideBar() {
               Apply Leave
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/student/chats"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              Batch chats
+            </a>
+          </li>
 
           <li className="mb-4">
             <a

@@ -35,7 +35,6 @@ function TeacherAttendance() {
 
     fetchData();
 
-    // Set current date
     const today = new Date();
     const options = {
       weekday: "long",
@@ -47,7 +46,6 @@ function TeacherAttendance() {
   }, [currentUser._id]);
 
   const handleAttendance = (studentId, attendanceStatus) => {
-    // Update student's attendance status
     setTeacher((prevTeacher) => {
       const updatedStudents = prevTeacher.batchId.students.map((student) => {
         if (student._id === studentId) {
@@ -61,7 +59,6 @@ function TeacherAttendance() {
       };
     });
 
-    // Update present and absent students arrays
     if (attendanceStatus === "Present") {
       setPresentStudents((prevPresentStudents) => [
         ...prevPresentStudents,
@@ -80,10 +77,19 @@ function TeacherAttendance() {
       );
     }
 
-    // Functionality to mark attendance
-    console.log(
-      `Marking attendance for student ${studentId} as ${attendanceStatus}`
-    );
+    setAttendenceDetails((prevDetails) => {
+      const updatedAttendance = prevDetails.attendance.map((entry) => {
+        if (new Date(entry.date).toDateString() === new Date().toDateString()) {
+          return {
+            ...entry,
+            present: presentStudents,
+            absent: absentStudents,
+          };
+        }
+        return entry;
+      });
+      return { ...prevDetails, attendance: updatedAttendance };
+    });
   };
 
   const handleSubmit = async () => {

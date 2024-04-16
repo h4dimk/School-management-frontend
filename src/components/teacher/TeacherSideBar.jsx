@@ -66,7 +66,15 @@ function TeacherSideBar() {
               href="/teacher/leaves"
               className="text-lg text-gray-300 hover:text-white"
             >
-              leaves
+             Batch leaves
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              href="/teacher/chats"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+             Batch chats
             </a>
           </li>
           <li className="mb-4">
