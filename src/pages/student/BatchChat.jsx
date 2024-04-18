@@ -5,16 +5,25 @@ import StudentSideBar from "../../components/student/StudentSideBar";
 import OtherChatMessage from "../../components/common/OtherChatMessage";
 
 function BatchChat() {
+  const { currentUser } = useSelector((state) => state.user);
+
   const [messages, setMessages] = useState([
-    { text: "Hello there!", timestamp: "10:00 AM", sender: "user1" },
+    { text: "Hello there!", timestamp: "10:00 AM", sender: currentUser },
     { text: "How are you?", timestamp: "10:05 AM", sender: "user2" },
-    { text: "I'm good, thanks!", timestamp: "10:10 AM", sender: "user1" },
+    {
+      text: "I'm good, thanks!",
+      timestamp: "10:10 AM",
+      sender: currentUser,
+    },
     { text: "What about you?", timestamp: "10:15 AM", sender: "user2" },
-    { text: "I'm doing great!", timestamp: "10:20 AM", sender: "user1" },
+    {
+      text: "I'm doing great!",
+      timestamp: "10:20 AM",
+      sender: currentUser,
+    },
   ]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
-  const { currentUser } = useSelector((state) => state.user);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -55,7 +64,7 @@ function BatchChat() {
         <div className="mt-24">
           <div className="overflow-y-auto mb-4 ">
             {messages.map((message, index) =>
-              message.sender === currentUser? (
+              message.sender === currentUser ? (
                 <ChatMessage key={index} message={message} />
               ) : (
                 <OtherChatMessage key={index} message={message} />

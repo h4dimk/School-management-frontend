@@ -8,7 +8,8 @@ function Courses() {
   const [course, setCourse] = useState("");
   const [subjects, setSubjects] = useState([{ name: "" }]);
   const [coursesList, setCoursesList] = useState([]);
-  const [isOpen, setIsOpen] = useState(false); // State to control the popup visibility
+  const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState("");
   const [courseToRemove, setCourseToRemove] = useState(null);
 
   useEffect(() => {
@@ -81,6 +82,7 @@ function Courses() {
       setSubjects([{ name: "" }]);
     } catch (error) {
       console.error("Error adding course:", error);
+      setError(error.response.data.message);
     }
   };
 
@@ -92,6 +94,8 @@ function Courses() {
         <div className="flex flex-col md:flex-row">
           <div className=" h-2/5 w-full md:w-1/2 bg-gray-200 p-6 rounded-md shadow-md mb-6 md:mr-4">
             <form onSubmit={handleSubmit} className="mb-6">
+              {error && <div className="text-red-500 mb-4">{error}</div>}
+
               <div className="mb-4">
                 <label
                   htmlFor="course"

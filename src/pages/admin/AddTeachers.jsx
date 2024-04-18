@@ -148,7 +148,7 @@ function AddTeachers() {
 
             <div className="mb-4">
               <label htmlFor="batch" className="text-white font-medium">
-               Assign Batch:
+                Assign Batch:
               </label>
               <select
                 id="batch"

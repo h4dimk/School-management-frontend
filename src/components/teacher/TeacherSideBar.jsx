@@ -85,6 +85,14 @@ function TeacherSideBar() {
               Announcements
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/teacher/timetable"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+             Timetable
+            </a>
+          </li>
 
           {/* Add more student-specific links as needed */}
           <li className="mt-10">
