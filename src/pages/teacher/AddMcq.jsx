@@ -7,6 +7,8 @@ function AddMCQ() {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
+  // const [selectedBatch, setSelectedBatch] = useState("");
+  // const [batchesList, setBatchesList] = useState([]);
   const [error, setError] = useState("");
   const { currentUser } = useSelector((state) => state.user);
   const [mcqs, setMcqs] = useState([]);
@@ -116,6 +118,16 @@ function AddMCQ() {
                   ))}
                 </select>
               </div>
+              {/* <div className="mb-4">
+                <label className="block mb-1 text-white">Assign to Batch:</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-zinc-700"
+                  value={selectedBatch}
+                  onChange={(e) => setSelectedBatch(e.target.value)}
+                  required
+                >
+                </select>
+              </div> */}
               <button
                 type="submit"
                 className="w-full bg-zinc-600 text-white py-2 rounded-md hover:bg-zinc-700 focus:outline-none focus:bg-zinc-700"
