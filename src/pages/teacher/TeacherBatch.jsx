@@ -21,7 +21,7 @@ function TeacherBatch() {
     };
 
     fetchTeacher();
-  }, [currentUser._id]); 
+  }, [currentUser._id]);
 
   return (
     <div className="flex">

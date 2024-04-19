@@ -93,6 +93,22 @@ function TeacherSideBar() {
              Timetable
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/teacher/add-mcq"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+             Add MCQ
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              href="/teacher/batch-mcq"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+             Batch MCQs
+            </a>
+          </li>
 
           {/* Add more student-specific links as needed */}
           <li className="mt-10">

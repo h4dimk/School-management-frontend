@@ -73,6 +73,14 @@ function StudentSideBar() {
               Timetable
             </a>
           </li>
+          <li className="mb-4">
+            <a
+              href="/student/mcqs"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              MCQs
+            </a>
+          </li>
           {/* Add more student-specific links as needed */}
           <li className="mt-10">
             <button

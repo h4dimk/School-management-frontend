@@ -32,6 +32,9 @@ import BatchChatStudent from "./pages/student/BatchChat";
 import AddTimeTable from "./pages/admin/AddTimeTable";
 import TeacherTimetable from "./pages/teacher/Timetable";
 import StudentTimetable from "./pages/student/Timetable";
+import AddMCQ from "./pages/teacher/AddMcq";
+import StudentMcqs from "./pages/student/StudentMcqs";
+import TeacherBatchMcqs from "./pages/teacher/TeacherBatchMcqs";
 
 function App() {
   return (
@@ -60,11 +63,14 @@ function App() {
           <Route path="student/apply-leave" element={<StudentApplyLeave />} />
           <Route path="student/chats" element={<BatchChatStudent />} />
           <Route path="student/timetable" element={<StudentTimetable />} />
+
           <Route
             path="student/announcement"
             element={<StudentAnnouncement />}
           />
+          <Route path="student/mcqs" element={<StudentMcqs />} />
         </Route>
+
         {/* teacher Routes */}
         <Route path="teacher/login" element={<TeacherLogin />} />
         <Route element={<PrivateTeacherRoute />}>
@@ -76,12 +82,13 @@ function App() {
           <Route path="teacher/leaves" element={<TeachersBatchLeaves />} />
           <Route path="teacher/chats" element={<BatchChatTeacher />} />
           <Route path="teacher/timetable" element={<TeacherTimetable />} />
-
           <Route
             path="teacher/announcement"
             element={<TeacherAnnouncement />}
           />
         </Route>
+        <Route path="teacher/add-mcq" element={<AddMCQ />} />
+        <Route path="teacher/batch-mcq" element={<TeacherBatchMcqs />} />
       </Routes>
     </BrowserRouter>
   );
