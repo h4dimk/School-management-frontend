@@ -35,6 +35,8 @@ import StudentTimetable from "./pages/student/Timetable";
 import AddMCQ from "./pages/teacher/AddMcq";
 import StudentMcqs from "./pages/student/StudentMcqs";
 import TeacherBatchMcqs from "./pages/teacher/TeacherBatchMcqs";
+import StudentAssignments from "./pages/student/StudentAssignments";
+import BatchAssignments from "./pages/teacher/BatchAssignments";
 
 function App() {
   return (
@@ -69,6 +71,7 @@ function App() {
             element={<StudentAnnouncement />}
           />
           <Route path="student/mcqs" element={<StudentMcqs />} />
+          <Route path="student/assignments" element={<StudentAssignments />} />
         </Route>
 
         {/* teacher Routes */}
@@ -89,6 +92,8 @@ function App() {
         </Route>
         <Route path="teacher/add-mcq" element={<AddMCQ />} />
         <Route path="teacher/batch-mcq" element={<TeacherBatchMcqs />} />
+        <Route path="teacher/assignments" element={<BatchAssignments />} />
+
       </Routes>
     </BrowserRouter>
   );
