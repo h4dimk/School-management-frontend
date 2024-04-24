@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import StudentSideBar from "../../components/student/StudentSideBar";
 import axios from "../../services/axiosService";
+import { io } from "socket.io-client";
 
 function StudentAnnouncement() {
   const [announcements, setAnnouncements] = useState([]);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
-
+  const socket = useRef(null);
 
   const handleExpandMessage = (messageId) => {
     setExpandedMessageId(messageId === expandedMessageId ? null : messageId);
   };
+
+  useEffect(() => {
+    socket.current = io("http://localhost:3000");
+
+    socket.current.on("newAnnouncement", (announcement) => {
+      setAnnouncements((prevAnnouncements) => [
+        ...prevAnnouncements,
+        announcement,
+      ]);
+    });
+  }, []);
 
   useEffect(() => {
     fetchAnnouncements();

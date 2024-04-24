@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-// import io from 'socket.io-client';
-// const socket = io();
+import { io } from "socket.io-client";
 
 function AdminAnounce() {
   const [announcement, setAnnouncement] = useState("");
   const [announcements, setAnnouncements] = useState([]);
+  const socket = useRef(null);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [announcementToRemove, setAnnouncementToRemove] = useState(null);
@@ -16,6 +16,13 @@ function AdminAnounce() {
   const handleExpandMessage = (messageId) => {
     setExpandedMessageId(messageId === expandedMessageId ? null : messageId);
   };
+
+  useEffect(() => {
+    socket.current = io("http://localhost:3000");
+    socket.current.on("connect", () => {
+      console.log(socket.current.id, "Socket Id ");
+    });
+  }, []);
 
   useEffect(() => {
     fetchAnnouncements();
@@ -46,9 +53,15 @@ function AdminAnounce() {
     e.preventDefault();
     try {
       const announcementText = announcement.replace(/\n/g, "<br>");
-      const response = await axios.post("/admin/add-announcement", {
+      const announcementData = {
         announcement: announcementText,
-      });
+        date: new Date(),
+      };
+      const response = await axios.post(
+        "/admin/add-announcement",
+        announcementData
+      );
+      socket.current.emit("createAnnouncement", announcementData);
       fetchAnnouncements();
       setAnnouncement("");
     } catch (error) {

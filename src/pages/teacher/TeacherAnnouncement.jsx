@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 import axios from "../../services/axiosService";
+import { io } from "socket.io-client";
 
 function TeacherAnnouncement() {
   const [announcements, setAnnouncements] = useState([]);
   const [expandedMessageId, setExpandedMessageId] = useState(null);
+  const socket = useRef(null);
 
   const handleExpandMessage = (messageId) => {
     setExpandedMessageId(messageId === expandedMessageId ? null : messageId);
   };
+
+  useEffect(() => {
+    socket.current = io("http://localhost:3000");
+
+    socket.current.on("newAnnouncement", (announcement) => {
+      setAnnouncements((prevAnnouncements) => [
+        ...prevAnnouncements,
+        announcement,
+      ]);
+    });
+  }, []);
 
   useEffect(() => {
     fetchAnnouncements();
@@ -31,10 +44,10 @@ function TeacherAnnouncement() {
     }
   };
 
-  function truncateMessage(message, maxLength) {
-    if (message.length <= maxLength) return message;
+  const truncateMessage = (message, maxLength) => {
+    if (!message || message.length <= maxLength) return message;
     return message.slice(0, maxLength) + "...";
-  }
+  };
 
   return (
     <div className="flex">
