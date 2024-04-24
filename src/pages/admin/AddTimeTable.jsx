@@ -46,6 +46,7 @@ function AddTimeTable() {
       console.error("Error fetching timetables:", error);
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTimetableData({ ...timetableData, [name]: value });
@@ -86,8 +87,8 @@ function AddTimeTable() {
         <h2 className="text-3xl font-semibold mb-4 text-white">
           Add Time Table
         </h2>
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-4">
+          <div className="col-span-1">
             <input
               type="date"
               name="date"
@@ -99,7 +100,7 @@ function AddTimeTable() {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="col-span-1">
             <select
               name="period"
               value={timetableData.period}
@@ -116,7 +117,7 @@ function AddTimeTable() {
             </select>
           </div>
 
-          <div className="mb-4">
+          <div className="col-span-1">
             <select
               name="teacher"
               value={timetableData.teacher}
@@ -133,7 +134,7 @@ function AddTimeTable() {
             </select>
           </div>
 
-          <div className="mb-4">
+          <div className="col-span-1">
             <input
               type="text"
               name="subject"
@@ -145,7 +146,7 @@ function AddTimeTable() {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="col-span-1">
             <select
               name="batch"
               value={timetableData.batch}
@@ -162,41 +163,48 @@ function AddTimeTable() {
             </select>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-zinc-600 text-white py-2 rounded-md hover:bg-zinc-700 focus:outline-none focus:bg-zinc-700"
-          >
-            Add Time Table
-          </button>
+          <div className="col-span-3">
+            <button
+              type="submit"
+              className="w-full bg-zinc-600 text-white py-2 rounded-md hover:bg-zinc-700 focus:outline-none focus:bg-zinc-700"
+            >
+              Add Time Table
+            </button>
+          </div>
         </form>
+
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4 text-white">
             Added Timetables
           </h2>
-          {timetables
-            .slice()
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .map((timetable, index) => (
-              <div
-                key={index}
-                className="bg-gray-800 p-4 rounded-md mb-4 relative"
-              >
-                <p className="text-white">
-                  Day: {new Date(timetable.date).toLocaleDateString()}
-                </p>
-
-                <p className="text-white">Period: {timetable.period}</p>
-                <p className="text-white">Subject: {timetable.subject}</p>
-                <p className="text-white">Teacher: {timetable.teacher.name}</p>
-                <p className="text-white">Batch: {timetable.batch.name}</p>
-                <button
-                  onClick={() => handleRemove(index)}
-                  className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 absolute bottom-0 right-0 mb-3 mr-3"
+          <div className="grid grid-cols-2 gap-4">
+            {timetables
+              .slice()
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .map((timetable, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800 p-4 rounded-md relative"
                 >
-                  Remove
-                </button>
-              </div>
-            ))}
+                  <p className="text-white">
+                    Day: {new Date(timetable.date).toLocaleDateString()}
+                  </p>
+
+                  <p className="text-white">Period: {timetable.period}</p>
+                  <p className="text-white">Subject: {timetable.subject}</p>
+                  <p className="text-white">
+                    Teacher: {timetable.teacher.name}
+                  </p>
+                  <p className="text-white">Batch: {timetable.batch.name}</p>
+                  <button
+                    onClick={() => handleRemove(index)}
+                    className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 absolute bottom-0 right-0 mb-3 mr-3"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>
