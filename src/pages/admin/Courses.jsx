@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
-import Popup from "reactjs-popup"; // Import Popup from reactjs-popup
+import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
 function Courses() {
@@ -11,6 +11,7 @@ function Courses() {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
   const [courseToRemove, setCourseToRemove] = useState(null);
+  const [editIndex, setEditIndex] = useState(null); // Track the index of the course being edited
 
   useEffect(() => {
     fetchCourses();
@@ -54,7 +55,14 @@ function Courses() {
 
   const handleRemoveCourse = async (index) => {
     setCourseToRemove(coursesList[index]._id);
-    setIsOpen(true); // Open the popup
+    setIsOpen(true);
+  };
+
+  const handleEditCourse = (index) => {
+    const courseToEdit = coursesList[index];
+    setEditIndex(index);
+    setCourse(courseToEdit.course);
+    setSubjects(courseToEdit.subjects);
   };
 
   const confirmRemoveCourse = async () => {
@@ -67,7 +75,7 @@ function Courses() {
     } catch (error) {
       console.error("Error deleting course:", error);
     }
-    setIsOpen(false); // Close the popup
+    setIsOpen(false);
   };
 
   const handleSubmit = async (event) => {
@@ -80,8 +88,29 @@ function Courses() {
       fetchCourses();
       setCourse("");
       setSubjects([{ name: "" }]);
+      setEditIndex(null);
     } catch (error) {
       console.error("Error adding course:", error);
+      setError(error.response.data.message);
+    }
+  };
+
+  const handleEditSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.put(
+        `/admin/update-course/${coursesList[editIndex]._id}`,
+        {
+          course,
+          subjects,
+        }
+      );
+      fetchCourses();
+      setCourse("");
+      setSubjects([{ name: "" }]);
+      setEditIndex(null);
+    } catch (error) {
+      console.error("Error updating course:", error);
       setError(error.response.data.message);
     }
   };
@@ -93,7 +122,10 @@ function Courses() {
         <h2 className="text-3xl font-semibold mb-6 text-white">Courses</h2>
         <div className="flex flex-col md:flex-row">
           <div className=" h-2/5 w-full md:w-1/2 bg-gray-200 p-6 rounded-md shadow-md mb-6 md:mr-4">
-            <form onSubmit={handleSubmit} className="mb-6">
+            <form
+              onSubmit={editIndex !== null ? handleEditSubmit : handleSubmit}
+              className="mb-6"
+            >
               {error && <div className="text-red-500 mb-4">{error}</div>}
 
               <div className="mb-4">
@@ -150,7 +182,7 @@ function Courses() {
                   type="submit"
                   className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800"
                 >
-                  Add Course
+                  {editIndex !== null ? "Update Course" : "Add Course"}
                 </button>
               </div>
             </form>
@@ -167,12 +199,20 @@ function Courses() {
                     <div>
                       <strong>Course:</strong> {item.course}
                     </div>
-                    <button
-                      className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
-                      onClick={() => handleRemoveCourse(index)}
-                    >
-                      Remove
-                    </button>
+                    <div>
+                      <button
+                        className="px-4 py-1 bg-zinc-700 text-white rounded-md hover:bg-zinc-800 mr-2"
+                        onClick={() => handleEditCourse(index)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                        onClick={() => handleRemoveCourse(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                   <strong>Subjects:</strong>
                   <ul>

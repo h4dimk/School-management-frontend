@@ -9,6 +9,9 @@ import {
 } from "firebase/storage";
 import { useSelector } from "react-redux";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faDownload } from "@fortawesome/free-solid-svg-icons";
+
 function StudentAssignments() {
   const { currentUser } = useSelector((state) => state.user);
 
@@ -133,6 +136,7 @@ function StudentAssignments() {
                 className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800"
                 onClick={uploadAssignment}
               >
+                <FontAwesomeIcon icon={faUpload} className="mr-2" />
                 Upload
               </button>
             </div>
@@ -168,6 +172,7 @@ function StudentAssignments() {
                       className="bg-zinc-700 text-white px-4 py-2 rounded-md hover:bg-zinc-800 inline-flex items-center"
                       onClick={() => downloadAssignment(assignment.assignment)}
                     >
+                      <FontAwesomeIcon icon={faDownload} className="mr-2" />
                       Download
                     </button>
                   </div>
