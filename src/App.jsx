@@ -83,7 +83,7 @@ function App() {
           <Route path="teacher/attendence" element={<TeacherAttendence />} />
           <Route path="teacher/apply-leave" element={<TeacherApplyLeave />} />
           <Route path="teacher/leaves" element={<TeachersBatchLeaves />} />
-          <Route path="teacher/chats" element={<BatchChatTeacher />} />
+          {/* <Route path="teacher/chats" element={<BatchChatTeacher />} /> */}
           <Route path="teacher/timetable" element={<TeacherTimetable />} />
           <Route
             path="teacher/announcement"

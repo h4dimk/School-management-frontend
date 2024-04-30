@@ -199,7 +199,7 @@ function StudentApplyLeave() {
                 .slice()
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((leave) => (
-                  <li key={leave.id} className="mb-8">
+                  <li key={leave._id} className="mb-8">
                     <div className="bg-gray-200 p-4 rounded-md relative">
                       <p className="text-lg mb-2">
                         <span className="font-semibold">Start Date:</span>{" "}

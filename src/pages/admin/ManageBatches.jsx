@@ -10,6 +10,7 @@ function ManageBatches() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [batchToRemove, setBatchToRemove] = useState(null);
+  const [showStudentsForBatch, setShowStudentsForBatch] = useState({});
 
   useEffect(() => {
     getBatches();
@@ -19,6 +20,12 @@ function ManageBatches() {
     try {
       const response = await axios.get("/admin/get-batches");
       setBatches(response.data);
+      // Initialize state to hide students for each batch
+      const initialShowStudentsState = {};
+      response.data.forEach((batch) => {
+        initialShowStudentsState[batch._id] = false;
+      });
+      setShowStudentsForBatch(initialShowStudentsState);
     } catch (error) {
       console.error("Error fetching batches:", error);
     }
@@ -55,6 +62,13 @@ function ManageBatches() {
     setIsOpen(false);
   };
 
+  const toggleShowStudents = (batchId) => {
+    setShowStudentsForBatch((prevState) => ({
+      ...prevState,
+      [batchId]: !prevState[batchId],
+    }));
+  };
+
   return (
     <div className="flex">
       <AdminSideBar />
@@ -76,22 +90,38 @@ function ManageBatches() {
           </button>
         </div>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-        <ul className="text-zinc-600">
+        <div className="mt-4">
           {batches.map((batch) => (
-            <li
-              key={batch._id}
-              className="flex items-center justify-between mb-2"
-            >
-              <span className="text-white">{batch.name}</span>
+            <div key={batch._id} className="border rounded-md p-4 mb-4">
+              <div className="flex justify-between mb-2">
+                <span className="text-white font-semibold">{batch.name}</span>
+                <button
+                  className="rounded-md bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2"
+                  onClick={() => removeBatch(batch._id)}
+                >
+                  Remove Batch
+                </button>
+              </div>
               <button
-                className="rounded-md bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2"
-                onClick={() => removeBatch(batch._id)}
+                className="px-4 py-2 rounded-md bg-zinc-600 text-white hover:bg-zinc-700 font-bold"
+                onClick={() => toggleShowStudents(batch._id)}
               >
-                Remove
+                {showStudentsForBatch[batch._id]
+                  ? "Hide Students"
+                  : "Show Students"}
               </button>
-            </li>
+              {showStudentsForBatch[batch._id] && (
+                <ul className="pl-4 mt-2">
+                  {batch.students.map((student) => (
+                    <li key={student._id} className="text-gray-400">
+                      {student.name} ({student.course})
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
         <Popup
           open={isOpen}
           closeOnDocumentClick

@@ -199,7 +199,7 @@ function TeacherApplyLeave() {
                 .slice()
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((leave) => (
-                  <li key={leave.id} className="mb-8">
+                  <li key={leave._id} className="mb-8">
                     <div className="bg-gray-200 p-4 rounded-md relative">
                       <p className="text-lg">
                         <span className="font-semibold">Start Date:</span>{" "}
@@ -221,7 +221,7 @@ function TeacherApplyLeave() {
                           {leave.status}
                         </span>
                       </p>
-                      {leave.status !=="Accepted" && (
+                      {leave.status !== "Accepted" && (
                         <button
                           onClick={() => cancelLeave(leave._id)}
                           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 absolute bottom-2 right-2"

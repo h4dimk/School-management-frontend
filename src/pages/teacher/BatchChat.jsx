@@ -1,49 +1,58 @@
 import React, { useState, useRef, useEffect } from "react";
-import ChatMessage from "../../components/common/ChatMessage";
 import { useSelector } from "react-redux";
+import axios from "../../services/axiosService";
+import ChatMessage from "../../components/common/ChatMessage";
 import OtherChatMessage from "../../components/common/OtherChatMessage";
 import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 
 function BatchChat() {
   const { currentUser } = useSelector((state) => state.user);
-
-  const [messages, setMessages] = useState([
-    { text: "Hello there!", timestamp: "10:00 AM", sender: currentUser },
-    { text: "How are you?", timestamp: "10:05 AM", sender: "user2" },
-    {
-      text: "I'm good, thanks!",
-      timestamp: "10:10 AM",
-      sender: currentUser,
-    },
-    { text: "What about you?", timestamp: "10:15 AM", sender: "user2" },
-    {
-      text: "I'm doing great!",
-      timestamp: "10:20 AM",
-      sender: currentUser,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(() => {
+    getMessages();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = (e) => {
+  const getMessages = async () => {
+    try {
+      const response = await axios.get(
+        `/teacher/get-chats/${currentUser.batchId}`
+      );
+      console;
+      setMessages(response.data.chats);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (newMessage.trim() === "") return;
-    const message = {
-      text: newMessage,
-      timestamp: new Date().toLocaleTimeString(),
-      sender: currentUser,
+    const messageData = {
+      message: newMessage,
+      sender: currentUser._id,
+      group: currentUser.batchId,
     };
-    setMessages([...messages, message]);
-    setNewMessage("");
+    try {
+      await axios.post("/teacher/add-message", messageData);
+      getMessages();
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
+
+  console.log(messages);
 
   return (
     <div className="flex">
@@ -61,33 +70,33 @@ function BatchChat() {
             </h3>
           </div>
         </div>
-        <div className="mt-24">
-          <div className="overflow-y-auto mb-4 ">
-            {messages.map((message, index) =>
-              message.sender === currentUser ? (
-                <ChatMessage key={index} message={message} />
+        <div className="mt-24 overflow-y-auto mb-4">
+          {messages.map((message, index) => (
+            <React.Fragment key={index}>
+              {message.sender._id === currentUser._id ? (
+                <ChatMessage chats={message} />
               ) : (
-                <OtherChatMessage key={index} message={message} />
-              )
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-          <form onSubmit={handleSubmit} className="fixed w-full bottom-5 ">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="w-3/4 p-3 border border-gray-300 rounded-l"
-            />
-            <button
-              type="submit"
-              className="bg-gray-600 text-lg text-gray-300 hover:text-white px-6 py-3 rounded-r "
-            >
-              Send
-            </button>
-          </form>
+                <OtherChatMessage chats={message} />
+              )}
+            </React.Fragment>
+          ))}
+          <div ref={messagesEndRef} />
         </div>
+        <form onSubmit={handleSubmit} className="fixed w-full bottom-5">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message..."
+            className="w-3/4 p-3 border border-gray-300 rounded-l"
+          />
+          <button
+            type="submit"
+            className="bg-gray-600 text-lg text-gray-300 hover:text-white px-6 py-3 rounded-r"
+          >
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );

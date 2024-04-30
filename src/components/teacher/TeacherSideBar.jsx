@@ -69,14 +69,14 @@ function TeacherSideBar() {
              Batch leaves
             </a>
           </li>
-          <li className="mb-4">
+          {/* <li className="mb-4">
             <a
               href="/teacher/chats"
               className="text-lg text-gray-300 hover:text-white"
             >
              Batch chats
             </a>
-          </li>
+          </li> */}
           <li className="mb-4">
             <a
               href="/teacher/announcement"
