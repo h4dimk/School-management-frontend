@@ -17,7 +17,12 @@ function StudentMcqs() {
   const fetchMCQs = async () => {
     try {
       const response = await axios.get(
-        `/student/get-mcqs-batch/${currentUser.batchId}`
+        `/student/get-mcqs-batch/${currentUser.batchId}`,
+        {
+          params: {
+            studentId: currentUser._id,
+          },
+        }
       );
       setMessages(Array(response.data.mcqs.length).fill(""));
       setErrors(Array(response.data.mcqs.length).fill(""));

@@ -27,7 +27,7 @@ import StudentApplyLeave from "./pages/student/StudentApplyLeave";
 import TeacherApplyLeave from "./pages/teacher/TeacherApplyLeave";
 import Leaves from "./pages/admin/Leaves";
 import TeachersBatchLeaves from "./pages/teacher/TeachersBatchLeaves";
-import BatchChatTeacher from "./pages/teacher/BatchChat";
+// import BatchChatTeacher from "./pages/teacher/BatchChat";
 import BatchChatStudent from "./pages/student/BatchChat";
 import AddTimeTable from "./pages/admin/AddTimeTable";
 import TeacherTimetable from "./pages/teacher/Timetable";
@@ -37,11 +37,16 @@ import StudentMcqs from "./pages/student/StudentMcqs";
 import TeacherBatchMcqs from "./pages/teacher/TeacherBatchMcqs";
 import StudentAssignments from "./pages/student/StudentAssignments";
 import BatchAssignments from "./pages/teacher/BatchAssignments";
+import StudentAnsweredMcqs from "./pages/student/StudentAnsweredMcqs";
+import Home from "./pages/common/Home";
+import TeacherRemarks from "./pages/teacher/TeacherRemarks";
+import StudentRemarks from "./pages/student/StudentRemarks";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="*" element={<Home />} />
         {/* Admin Routes */}
         <Route path="admin/login" element={<AdminLogin />} />
         <Route element={<PrivateAdminRoute />}>
@@ -71,7 +76,13 @@ function App() {
             element={<StudentAnnouncement />}
           />
           <Route path="student/mcqs" element={<StudentMcqs />} />
+          <Route
+            path="student/answered-mcqs"
+            element={<StudentAnsweredMcqs />}
+          />
           <Route path="student/assignments" element={<StudentAssignments />} />
+          <Route path="student/remarks" element={<StudentRemarks />} />
+
         </Route>
 
         {/* teacher Routes */}
@@ -89,11 +100,12 @@ function App() {
             path="teacher/announcement"
             element={<TeacherAnnouncement />}
           />
-        </Route>
-        <Route path="teacher/add-mcq" element={<AddMCQ />} />
-        <Route path="teacher/batch-mcq" element={<TeacherBatchMcqs />} />
-        <Route path="teacher/assignments" element={<BatchAssignments />} />
+          <Route path="teacher/add-mcq" element={<AddMCQ />} />
+          <Route path="teacher/batch-mcq" element={<TeacherBatchMcqs />} />
+          <Route path="teacher/assignments" element={<BatchAssignments />} />
+          <Route path="teacher/remarks" element={<TeacherRemarks />} />
 
+        </Route>
       </Routes>
     </BrowserRouter>
   );

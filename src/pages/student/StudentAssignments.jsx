@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faDownload, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
 function StudentAssignments() {
   const { currentUser } = useSelector((state) => state.user);
@@ -160,7 +160,8 @@ function StudentAssignments() {
                   className="p-4 rounded-lg shadow-md bg-gray-200 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="font-semibold text-lg">
+                    <div className="font-semibold text-lg mb-4">
+                    <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
                       {assignment.name}
                     </div>
                   </div>
