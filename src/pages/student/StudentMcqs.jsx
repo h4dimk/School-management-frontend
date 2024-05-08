@@ -49,6 +49,7 @@ function StudentMcqs() {
         mcqId,
         isCorrect,
         studentId: currentUser._id,
+        batchId: currentUser.batchId,
       });
 
       if (isCorrect) {

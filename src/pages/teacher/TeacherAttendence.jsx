@@ -109,6 +109,8 @@ function TeacherAttendance() {
         date: new Date(),
       });
 
+      fetchA
+
       console.log("Attendance uploaded successfully:", response.data);
       setPresentStudents([]);
       setAbsentStudents([]);

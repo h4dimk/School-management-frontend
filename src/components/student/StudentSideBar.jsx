@@ -15,6 +15,7 @@ import {
   faCheckSquare,
   faFileAlt,
   faStickyNote,
+  faAward,
 } from "@fortawesome/free-solid-svg-icons";
 
 function StudentSideBar() {
@@ -115,6 +116,15 @@ function StudentSideBar() {
             >
               <FontAwesomeIcon icon={faCheckSquare} className="mr-2" />
               Answered MCQs
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              href="/student/ranks"
+              className="text-lg text-gray-300 hover:text-white"
+            >
+              <FontAwesomeIcon icon={faAward} className="mr-2" />
+             Batch Ranks
             </a>
           </li>
           <li className="mb-4">

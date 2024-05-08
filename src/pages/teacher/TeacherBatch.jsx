@@ -5,6 +5,7 @@ import TeacherSideBar from "../../components/teacher/TeacherSideBar";
 
 function TeacherBatch() {
   const [teacher, setTeacher] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -23,6 +24,12 @@ function TeacherBatch() {
     fetchTeacher();
   }, [currentUser._id]);
 
+  const filteredStudents = teacher
+    ? teacher.batchId.students.filter((student) =>
+        student.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
+
   return (
     <div className="flex">
       <TeacherSideBar />
@@ -32,12 +39,21 @@ function TeacherBatch() {
             <h2 className="text-3xl font-semibold mb-4 text-white">
               Batch: {teacher.batchId.name}
             </h2>
-            <div>
-              <h4 className="text-xl font-semibold mb-2 text-white">
-                Students:
-              </h4>
+            <div className="mt-3">
+              <div className="flex items-center mb-4 ">
+                <h4 className="text-xl font-semibold mb-2 text-white mr-4">
+                  Students:
+                </h4>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by name..."
+                  className="border border-gray-300 rounded p-1 focus:outline-none w-1/2"
+                />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-3">
-                {teacher.batchId.students.map((student) => (
+                {filteredStudents.map((student) => (
                   <div
                     key={student._id}
                     className="bg-gray-300 p-4 rounded-lg shadow-md"

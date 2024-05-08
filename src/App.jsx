@@ -41,6 +41,8 @@ import StudentAnsweredMcqs from "./pages/student/StudentAnsweredMcqs";
 import Home from "./pages/common/Home";
 import TeacherRemarks from "./pages/teacher/TeacherRemarks";
 import StudentRemarks from "./pages/student/StudentRemarks";
+import StudentRanking from "./pages/student/StudentRanking";
+import BatchRanking from "./pages/teacher/BatchRanking";
 
 function App() {
   return (
@@ -82,7 +84,7 @@ function App() {
           />
           <Route path="student/assignments" element={<StudentAssignments />} />
           <Route path="student/remarks" element={<StudentRemarks />} />
-
+          <Route path="student/ranks" element={<StudentRanking />} />
         </Route>
 
         {/* teacher Routes */}
@@ -102,9 +104,10 @@ function App() {
           />
           <Route path="teacher/add-mcq" element={<AddMCQ />} />
           <Route path="teacher/batch-mcq" element={<TeacherBatchMcqs />} />
+          <Route path="teacher/batch-ranks" element={<BatchRanking />} />
+
           <Route path="teacher/assignments" element={<BatchAssignments />} />
           <Route path="teacher/remarks" element={<TeacherRemarks />} />
-
         </Route>
       </Routes>
     </BrowserRouter>
