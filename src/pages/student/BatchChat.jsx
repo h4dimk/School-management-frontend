@@ -23,9 +23,10 @@ function BatchChat() {
       socket.current.disconnect();
     };
   }, []);
+
   useEffect(() => {
-    socket.current.on("newMessage", (messages) => {
-      setMessages((prevMessages) => [...prevMessages, messages]);
+    socket.current.on("newMessage", (newMessage) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
     return () => {
@@ -68,8 +69,8 @@ function BatchChat() {
     try {
       await axios.post("/student/add-message", message);
       socket.current.emit("addMessage", message);
-      getMessages();
       setNewMessage("");
+      getMessages(); // Fetch new messages after sending
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -78,8 +79,8 @@ function BatchChat() {
   return (
     <div className="flex">
       <StudentSideBar />
-      <div className="container mx-auto px-4 py-8 flex-1 ml-56">
-        <div className="fixed w-4/5 flex justify-between px-4 py-8">
+      <div className="container mx-auto px-4 py-8 flex-1 ml-56 ">
+        <div className="fixed w-4/5 flex justify-between px-4 py-8 ">
           <div>
             <h3 className="text-3xl font-semibold mb-3 text-white">
               Batch Chats
@@ -91,7 +92,7 @@ function BatchChat() {
             </h3>
           </div>
         </div>
-        <div className="mt-24 overflow-y-auto mb-8">
+        <div className="mt-32 overflow-y-scroll h-96 border border-gray-600 p-3 bg-gradient-to-l from-gray-900 to-gray-700">
           {messages.map((message, index) => (
             <React.Fragment key={index}>
               {message.sender._id === currentUser._id ? (
@@ -103,7 +104,10 @@ function BatchChat() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={handleSubmit} className="fixed w-full bottom-5">
+        <form
+          onSubmit={handleSubmit}
+          className="fixed w-full mt-3 flex items-center"
+        >
           <input
             type="text"
             value={newMessage}
