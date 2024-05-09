@@ -13,7 +13,7 @@ function StudentAnnouncement() {
   };
 
   useEffect(() => {
-    socket.current = io("http://localhost:3000");
+    socket.current = io(import.meta.env.VITE_SERVER_URL);
 
     socket.current.on("newAnnouncement", (announcement) => {
       setAnnouncements((prevAnnouncements) => [

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AdminSideBar from "../../components/admin/AdminSideBar";
 import axios from "../../services/axiosService";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 function AddTimeTable() {
   const [timetableData, setTimetableData] = useState({
@@ -13,6 +15,9 @@ function AddTimeTable() {
   const [teachers, setTeachers] = useState([]);
   const [batches, setBatches] = useState([]);
   const [timetables, setTimetables] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [timeTableToRemove, setTimeTableToRemove] = useState(null);
 
   useEffect(() => {
     fetchTeachers();
@@ -55,7 +60,8 @@ function AddTimeTable() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/admin/add-timetable", timetableData);
+      const response = await axios.post("/admin/add-timetable", timetableData);
+
       console.log("Timetable added successfully");
       setTimetableData({
         date: "",
@@ -64,20 +70,27 @@ function AddTimeTable() {
         teacher: "",
         batch: "",
       });
-      getTimetables(); // Refresh timetables after adding
+      setErrorMessage("");
+      getTimetables();
     } catch (error) {
       console.error("Error adding timetable:", error);
+      setErrorMessage(error.response.data.message);
     }
   };
 
-  const handleRemove = async (index) => {
+  const handleRemove = async (timeTableId) => {
+    setTimeTableToRemove(timeTableId);
+    setIsOpen(true);
+  };
+
+  const confirmRemoveBatch = async () => {
     try {
-      await axios.delete(`/admin/remove-timetable/${timetables[index]._id}`);
-      console.log("Timetable deleted successfully");
-      getTimetables(); // Refresh timetables after deleting
+      await axios.delete(`/admin/remove-timetable/${timeTableToRemove}`);
+      getTimetables();
     } catch (error) {
       console.error("Error deleting timetable:", error);
     }
+    setIsOpen(false);
   };
 
   return (
@@ -173,39 +186,90 @@ function AddTimeTable() {
           </div>
         </form>
 
+        {errorMessage && (
+          <div className="text-red-500 mb-4 mt-3">{errorMessage}</div>
+        )}
+
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4 text-white">
             Added Timetables
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {timetables
               .slice()
-              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .sort((a, b) => new Date(a.date) - new Date(b.date))
               .map((timetable, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800 p-4 rounded-md relative"
+                  className="bg-gray-800 p-4 rounded-md table w-full"
                 >
-                  <p className="text-white">
-                    Day: {new Date(timetable.date).toLocaleDateString()}
-                  </p>
-
-                  <p className="text-white">Period: {timetable.period}</p>
-                  <p className="text-white">Subject: {timetable.subject}</p>
-                  <p className="text-white">
-                    Teacher: {timetable.teacher.name}
-                  </p>
-                  <p className="text-white">Batch: {timetable.batch.name}</p>
-                  <button
-                    onClick={() => handleRemove(index)}
-                    className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 absolute bottom-0 right-0 mb-3 mr-3"
-                  >
-                    Remove
-                  </button>
+                  <thead className="text-white">
+                    <tr>
+                      <th className="border px-4 py-2">Day</th>
+                      <th className="border px-4 py-2">Period</th>
+                      <th className="border px-4 py-2">Subject</th>
+                      <th className="border px-4 py-2">Teacher</th>
+                      <th className="border px-4 py-2">Batch</th>
+                      <th className="border px-4 py-2"> Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="text-white px-4 py-2 border text-center">
+                        {new Date(timetable.date).toLocaleDateString()}
+                      </td>
+                      <td className="text-white px-4 py-2 border text-center">
+                        {timetable.period}
+                      </td>
+                      <td className="text-white px-4 py-2 border text-center">
+                        {timetable.subject}
+                      </td>
+                      <td className="text-white px-4 py-2 border text-center">
+                        {timetable.teacher.name}
+                      </td>
+                      <td className="text-white px-4 py-2 border text-center">
+                        {timetable.batch.name}
+                      </td>
+                      <td className="text-white px-4 py-2 border text-center">
+                        <button
+                          onClick={() => handleRemove(timetable._id)}
+                          className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 "
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
                 </div>
               ))}
           </div>
         </div>
+        <Popup
+          open={isOpen}
+          closeOnDocumentClick
+          onClose={() => setIsOpen(false)}
+          modal
+        >
+          <div className="p-5">
+            <p className="text-lg font-semibold text-gray-700">
+              Are you sure you want to remove this Timetable?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-600 text-white hover:bg-red-700 font-bold py-1 px-2 mr-2 rounded-md "
+                onClick={confirmRemoveBatch}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-zinc-600 text-white hover:bg-zinc-700 font-bold py-1 px-2 rounded-md "
+                onClick={() => setIsOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </Popup>
       </div>
     </div>
   );

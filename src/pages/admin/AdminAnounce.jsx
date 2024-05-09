@@ -18,7 +18,7 @@ function AdminAnounce() {
   };
 
   useEffect(() => {
-    socket.current = io("http://localhost:3000");
+    socket.current = io(import.meta.env.VITE_SERVER_URL);
     socket.current.on("connect", () => {
       console.log(socket.current.id, "Socket Id ");
     });
