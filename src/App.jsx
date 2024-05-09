@@ -43,12 +43,15 @@ import TeacherRemarks from "./pages/teacher/TeacherRemarks";
 import StudentRemarks from "./pages/student/StudentRemarks";
 import StudentRanking from "./pages/student/StudentRanking";
 import BatchRanking from "./pages/teacher/BatchRanking";
+import Error404page from "./pages/common/Error404page";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Error404page />} />
+        <Route path="/" element={<Home />} />
+
         {/* Admin Routes */}
         <Route path="admin/login" element={<AdminLogin />} />
         <Route element={<PrivateAdminRoute />}>

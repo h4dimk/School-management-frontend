@@ -85,6 +85,14 @@ function AdminLogin() {
             Login
           </button>
         </form>
+        <div className="text-center mt-8">
+          <a
+            href="/"
+            className="text-gray-300 hover:text-gray-400 underline"
+          >
+            Go Back Home
+          </a>
+        </div>
       </div>
     </div>
   );
