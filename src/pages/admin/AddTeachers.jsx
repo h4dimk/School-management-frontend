@@ -68,7 +68,7 @@ function AddTeachers() {
       setError("");
     } catch (error) {
       console.error("Error adding teacher:", error);
-      setError(error.response.data.error);
+      setError(error.response.data.message);
     }
   };
 

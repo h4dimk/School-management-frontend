@@ -84,7 +84,7 @@ function AddStudents() {
       console.log("Student added successfully:", response.data);
     } catch (error) {
       console.error("Error adding student:", error);
-      setError(error.response.data.error);
+      setError(error.response.data.message);
     }
   };
 
