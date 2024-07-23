@@ -7,7 +7,8 @@ import {
   signInFailure,
   signInSuccess,
 } from "../../redux/user/userSlice";
-import Header from "../../components/common/Home/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -40,11 +41,18 @@ function AdminLogin() {
   };
 
   return (
-    <section className=" bg-gray-800 min-h-screen flex items-center justify-center px-6 py-8">
+    <section className="bg-gray-800 min-h-screen flex items-center justify-center px-6 py-8">
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:bg-gray-700 dark:border dark:border-gray-600">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Admin login
+          <div className="flex justify-center mb-4">
+            <FontAwesomeIcon
+              icon={faUserLock}
+              size="2x"
+              className="text-blue-600"
+            />
+          </div>
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+            Admin Login
           </h1>
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
@@ -90,7 +98,6 @@ function AdminLogin() {
             >
               Sign in
             </button>
-
             <div className="text-center mt-4">
               <a
                 href="/"
