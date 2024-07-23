@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "../../services/axiosService";
-import ChatMessage from "../../components/common/ChatMessage";
-import OtherChatMessage from "../../components/common/OtherChatMessage";
+import ChatMessage from "../../components/common/Chat/ChatMessage";
+import OtherChatMessage from "../../components/common/Chat/OtherChatMessage";
 import StudentSideBar from "../../components/student/StudentSideBar";
 import { io } from "socket.io-client";
 
