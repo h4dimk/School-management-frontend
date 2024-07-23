@@ -16,7 +16,7 @@ const FeaturesSection = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-2xl font-bold mb-4">Communication Tools</h3>
-            <p>Facilitate seamless communication between teachers, students, and parents.</p>
+            <p>Facilitate seamless communication between students.</p>
           </div>
         </div>
       </div>
