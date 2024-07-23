@@ -31,7 +31,7 @@ const Header = () => {
           <ul className="flex space-x-6">
             <li>
               <a
-                href="#home"
+                href="/"
                 className="text-gray-200 hover:text-white
               "
               >

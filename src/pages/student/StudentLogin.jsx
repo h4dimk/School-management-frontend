@@ -39,62 +39,69 @@ function StudentLogin() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-zinc-900">
-      <div className="bg-zinc-600 p-24 rounded-lg shadow-md mx-auto">
-        <h2 className="text-3xl font-semibold mb-6 text-white text-center">
-          Student Login
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-white font-medium mb-2"
+    <section className=" bg-gray-800 min-h-screen flex items-center justify-center px-6 py-8">
+      <div className="w-full max-w-md bg-white rounded-lg shadow dark:bg-gray-700 dark:border dark:border-gray-600">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Student login
+          </h1>
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Your email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="name@company.com"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            <button
+              type="submit"
+              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-8 py-2 border rounded-md focus:outline-none focus:border-zinc-700"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-white font-medium mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-8 py-2 border rounded-md focus:outline-none focus:border-zinc-700"
-              required
-            />
-          </div>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-300"
-          >
-            Login
-          </button>
-        </form>
-        <div className="text-center mt-8">
-          <a
-            href="/"
-            className="text-gray-300 hover:text-gray-400 underline"
-          >
-            Go Back Home
-          </a>
+              Sign in
+            </button>
+
+            <div className="text-center mt-4">
+              <a
+                href="/"
+                className="text-gray-300 hover:text-gray-400 underline"
+              >
+                Go Back Home
+              </a>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
