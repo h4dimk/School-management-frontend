@@ -13,6 +13,7 @@ function AddTeachers() {
   const [batchesList, setBatchesList] = useState([]);
   // const [avatar, setAvatar] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchBatches();
@@ -59,6 +60,7 @@ function AddTeachers() {
       };
       const response = await axios.post("/admin/add-teacher", newTeacher);
       console.log("Teacher added successfully", response.data);
+      setSuccess("Teacher added successfully");
       setName("");
       setEmail("");
       setSubject("");
@@ -191,6 +193,7 @@ function AddTeachers() {
             </div> */}
           </div>
           {error && <p className="text-red-500 mb-4">{error}</p>}
+          {success && <p className="text-green-500 mb-4">{success}</p>}
           <button
             type="submit"
             className="px-4 py-2 rounded-md bg-zinc-600 text-white hover:bg-zinc-700"

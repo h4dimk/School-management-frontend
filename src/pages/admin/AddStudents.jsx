@@ -14,6 +14,7 @@ function AddStudents() {
   const [coursesList, setCoursesList] = useState([]);
   const [batchesList, setBatchesList] = useState([]);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchCourses();
@@ -75,6 +76,7 @@ function AddStudents() {
     };
     try {
       const response = await axios.post("/admin/add-student", newStudent);
+      setSuccess("Student added successfully");
       setName("");
       setEmail("");
       setCourse("");
@@ -211,6 +213,7 @@ function AddStudents() {
             </div> */}
           </div>
           {error && <div className="text-red-600 mb-4">{error}</div>}
+          {success && <p className="text-green-500 mb-4">{success}</p>}
           <button
             type="submit"
             className="px-4 py-2 rounded-md bg-zinc-600 text-white hover:bg-zinc-700"
